@@ -1,0 +1,44 @@
+body{
+    background-image: url('./cocina.jpg') ;
+    backdrop-filter: brightness(0.5);
+}
+
+.heading{
+    color: rgb(124, 81, 24);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    background-color: white;
+}
+
+h1{
+    font-size: 50px;
+}
+
+.heading-h2{
+    font-size: 30px;
+}
+
+#h2-ID{
+    color: red;
+}
+
+span{
+    color: blue;
+}
+
+.span-rojo{
+    color: red
+}
+
+#span-red{
+    color: violet
+}
+
+.img-sales{
+    width: 400px;
+    border: 2px red solid;
+}
+
+p{
+    background: white;
+}
