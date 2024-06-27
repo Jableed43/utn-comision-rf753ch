@@ -1,44 +1,52 @@
-body{
-    background-image: url('./cocina.jpg') ;
-    backdrop-filter: brightness(0.5);
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: url('https://www.vivaplaya.net/viva/wp-content/uploads/2022/04/amanecer-playa-del-carmen-viva-playa.jpg');
+    background-color: rgba(0, 0, 0, 0.5); /* Aplicar color con opacidad */
+    background-blend-mode: darken; /* Mezclar el color de fondo con la imagen */
 }
 
-.heading{
+section {
+    padding: 20px;
+}
+
+.heading {
     color: rgb(124, 81, 24);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
     background-color: white;
 }
 
-h1{
+h1 {
     font-size: 50px;
 }
 
-.heading-h2{
+.heading-h2 {
     font-size: 30px;
 }
 
-#h2-ID{
+#h2-ID {
     color: red;
 }
 
-span{
+span {
     color: blue;
 }
 
-.span-rojo{
-    color: red
+.span-rojo {
+    color: red;
 }
 
-#span-red{
-    color: violet
+#span-red {
+    color: violet;
 }
 
-.img-sales{
+.img-sales {
     width: 400px;
     border: 2px red solid;
 }
 
-p{
+p {
     background: white;
 }
