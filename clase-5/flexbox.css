@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header, footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+}
+
+header {
+    border-bottom: 2px solid #000;
+}
+
+footer {
+    border-top: 2px solid #000;
+}
+
+section {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #ffffff;
+    border: 2px solid #ccc;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+/* Flex Containers */
+.flex-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 2px solid #000;
+}
+
+.flex-item {
+    background-color: #4CAF50;
+    border: 2px solid #000;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+/* Contenedor 1: Distribución de espacio igual */
+.flex-equal-space {
+    justify-content: space-between;
+}
+
+/* Contenedor 2: Columnas de tamaño flexible y fijo */
+.flex-fixed-flexible {
+    justify-content: space-between;
+}
+
+.flex-fixed-flexible .flex-item.fixed {
+    width: 100px;
+}
+
+.flex-fixed-flexible .flex-item.flexible {
+    flex-grow: 1;
+}
+
+/* Contenedor 3: Alineación vertical y horizontal */
+.flex-align-center {
+    justify-content: center;
+    align-items: center;
+    height: 300px; /* Altura fija para demostrar alineación vertical */
+}
+
+/* Contenedor 4: Columnas con orden y tamaño variable */
+.flex-order-size {
+    justify-content: space-between;
+}

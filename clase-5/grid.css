@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header, footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+}
+
+header {
+    border-bottom: 2px solid #000;
+}
+
+footer {
+    border-top: 2px solid #000;
+}
+
+section {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #ffffff;
+    border: 2px solid #ccc;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+/* Grid Containers */
+.grid-container {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 2px solid #000;
+}
+
+.grid-item {
+    background-color: #4CAF50;
+    border: 2px solid #000;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+/* Contenedor 1: Columnas de igual tamaño */
+.grid-equal-columns {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Contenedor 2: Columnas de tamaño fijo y flexible */
+.grid-fixed-flexible {
+    grid-template-columns: 100px 1fr 2fr 1fr;
+}
+
+/* Contenedor 3: Filas de igual tamaño */
+.grid-equal-rows {
+    grid-template-rows: repeat(4, 100px);
+}
+
+/* Contenedor 4: Filas de tamaño fijo y flexible */
+.grid-fixed-flexible-rows {
+    grid-template-rows: 100px auto 200px 1fr;
+}
