@@ -14,11 +14,27 @@ body {
 header {
     background-color: #333;
     color: white;
-    padding: 16px 0;
+    padding: 35px 0;
 }
 
 header h1 {
     text-align: center;
+}
+
+.logo-header{
+    width: 100px;
+    position: absolute;
+    left: 42%;
+    top: 22%;
+}
+
+.logo-arrow{
+    width: 50px;
+    position: fixed;
+    right: 20px;
+    bottom: 40px;
+    cursor: pointer;
+    filter: drop-shadow(1px 3px 6px black);
 }
 
 nav ul {
@@ -32,12 +48,24 @@ nav ul li {
     border: 1px solid white;
     border-radius: 8px;
     box-shadow: 3px 2px 2px 2px white;
+    transition: color 0.3s border 0.3s;
+}
+
+nav ul li:hover {
+    box-shadow: 3px 2px 2px 2px red;
+    border: 1px solid red;
+
 }
 
 nav ul li a {
     color: white;
     text-decoration: none;
     padding: 8px 16px;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover{
+    color: red;
 }
 
 main {
@@ -54,15 +82,38 @@ section h2, section p, section ul, h3 {
 }
 
 .services-img {
-    width: 90%;
+    width: 100%;
     margin: auto;
 }
 
-#grid div{
+#grid{
     display: flex;
-    gap: 10px;
+    gap: 20px;
     justify-content: center;
     flex-direction: column;
+}
+
+#grid div{
+    padding: 10px;
+    border: black 2px solid;
+    border-radius: 8px;
+    background: white;
+    filter: drop-shadow(5px 4px 4px black);
+    transition: all 0.5s;
+    opacity: 0.7;
+    position: relative;
+}
+
+#grid div:hover{
+    scale: 1.05;
+    opacity: 1;
+}
+
+#grid div img.sticker{
+    width: 25%;
+    position: absolute;
+    top: 1px;
+    left: 0px;
 }
 
 form {
@@ -141,7 +192,7 @@ footer {
 /* Desde 0 hasta 425 */
 @media screen and (max-width: 425px){
     nav ul li{
-        box-shadow: 3px 2px 2px 2px blue;
+        box-shadow: 3px 2px 2px 2px white;
     }
 }
 
@@ -160,28 +211,32 @@ footer {
 }
 
 /* Intervalo entre 300px y 400px */
-@media screen and (min-width: 300px) and (max-width: 400px) and (orientation: portrait) {
+/* @media screen and (min-width: 300px) and (max-width: 400px) and (orientation: portrait) {
     section p{
         color: red
     }
-}
+} */
 
-@media screen and (min-width: 300px) and (max-width: 400px) and (orientation: landscape){
+/* @media screen and (min-width: 300px) and (max-width: 400px) and (orientation: landscape){
     section p{
         color: violet
     }
-}
+} */
 
 @media screen and (min-width: 615px){
     .services-img {
-        width: 45%;
+        width: 100%;
         margin: auto;
     }
 
     #grid div{
+        width: 35%;
+    }
+
+    #grid{
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 20px;
         justify-content: center;
     }
 }
