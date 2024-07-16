@@ -1,0 +1,45 @@
+/* Header */
+body header nav.navClass{
+    background-color: #2d634a !important;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+.navbar-toggler{
+ border: 1px solid white !important;
+}
+
+.navbar-brand img{
+    width: 75px;
+}
+
+.w-100 {
+    height: 65vh;
+}
+
+.card-container{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    padding: 0 15px;
+    margin: 20px 0;
+    justify-content: center
+}
+
+div.card .card-body{
+    padding: 10px;
+}
+
+@media screen and (max-width: 790px) {
+    .card-container{
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .card-body{
+        width: 88% !important;
+    }
+}
