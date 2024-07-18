@@ -117,6 +117,7 @@ section.galeria{
 
     .index section.galeria .galeria-img-container img{
         width: 100%;
+        color: 'red'
     }
 
 }
