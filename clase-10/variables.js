@@ -32,11 +32,13 @@ console.log(variable3);
 let x = 100;
 console.log(x);
 
+console.log("var");
+
 //Scope de var
 // Implementacion - Definicion de funcion
 function varScope() {
   //cree una variable x
-  let x = 10;
+  var x = 10;
   //Condicional if
   if (true) {
     //bloque de codigo
@@ -51,7 +53,7 @@ varScope();
 
 //block-scoped - se encuentra encerrado en un contexto
 //global-scoped - se encuentra suelto
-
+console.log("let");
 //Scope de let
 //Te genera diferentes variables locales con diferentes valores e identidad
 let y = 100;
@@ -66,6 +68,8 @@ function letScope() {
 }
 
 letScope();
+
+console.log("const");
 
 //Const: Puede generar variables locales y globales. No redefine ni redeclara.
 const z = 101;
