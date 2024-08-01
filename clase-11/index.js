@@ -47,6 +47,7 @@ console.log(2 <= 5);
 
 let num = 4;
 
+//Typeof te devuelve el tipo de dato del valor. En este caso lo usamos para validar.
 if (typeof num === "number") {
   if (num >= 5) {
     console.log("Num es mayor o igual a 5");
