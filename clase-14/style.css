@@ -1,0 +1,10 @@
+.hover-target {
+    width: 100px;
+    height: 100px;
+    background-color: lightblue;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  .initial-style {
+    transition: all 0.3s ease;
+  }
