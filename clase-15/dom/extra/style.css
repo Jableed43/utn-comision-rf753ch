@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .container {
+    max-width: 300px;
+    margin: 50px auto;
+    text-align: center;
+  }
+  .counter {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  .buttons {
+    margin-bottom: 20px;
+  }
+  .buttons button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 1em;
+  }
+  .color-box {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    border: 1px solid #000;
+  }
+  .theme-switcher {
+    margin-top: 20px;
+  }
+  .dark-mode {
+    background-color: #333;
+    color: #fff;
+  }
+  .light-mode {
+    background-color: #fff;
+    color: #000;
+  }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input y estilos</title>
+  </head>
+  <body>
+    <label for="textoInput">Texto:</label>
+    <input type="text" id="textoInput" />
+
+    <br />
+
+    <label for="colorInput">Color:</label>
+    <input type="color" id="colorInput" />
+
+    <br />
+
+    <label for="fontSizeInput">Tamaño de fuente:</label>
+    <input type="number" id="fontSizeInput" min="1" value="16" />
+
+    <br />
+
+    <label for="textDecorationSelect">Decoración del texto:</label>
+    <select id="textDecorationSelect">
+      <option value="none">Ninguno</option>
+      <option value="underline">Subrayado</option>
+      <option value="overline">Sobrerayado</option>
+      <option value="line-through">Tachado</option>
+    </select>
+
+    <br />
+
+    <label for="fontFamilySelect">Tipo de fuente:</label>
+    <select id="fontFamilySelect">
+      <option value="Arial">Arial</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Georgia">Georgia</option>
+    </select>
+
+    <br />
+
+    <label for="textAlignSelect">Alineación del texto:</label>
+    <select id="textAlignSelect">
+      <option value="left">Izquierda</option>
+      <option value="center">Centro</option>
+      <option value="right">Derecha</option>
+    </select>
+
+    <br />
+
+    <label for="letterSpacingInput">Espaciado entre letras (px):</label>
+    <input type="number" id="letterSpacingInput" min="0" value="0" />
+
+    <br />
+
+    <!-- Checkboxes para estilos adicionales -->
+    <label><input type="checkbox" id="boldCheckbox" /> Negrita</label>
+    <label><input type="checkbox" id="italicCheckbox" /> Cursiva</label>
+    <label><input type="checkbox" id="uppercaseCheckbox" /> Mayúsculas</label>
+    <label><input type="checkbox" id="lowercaseCheckbox" /> Minúsculas</label>
+
+    <br />
+
+    <p id="resultado"></p>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
