@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trabajo practico DOM</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section id="cards">
+      <h2>Cards</h2>
+
+      <div id="cards-container">
+        <!-- Aqui dentro se añadiran las cards nuevas -->
+      </div>
+
+      <div id="card-form-container">
+        <h3>Añadir nueva Card</h3>
+        <form id="card-form">
+          <label for="card-title">Titulo:</label>
+          <input type="text" id="card-title" name="card-title" required />
+          <br />
+          <label for="card-description">Descripción:</label>
+          <input
+            type="text"
+            id="card-description"
+            name="card-description"
+            required
+          />
+          <br />
+          <label for="card-image">Url de imagen:</label>
+          <input
+            type="url"
+            name="card-image"
+            id="card-image"
+            placeholder="https://picsum.photos/200"
+          />
+          <br />
+          <h4>Personalizacion</h4>
+          <label for="card-bg-color">Color de fondo</label>
+          <input
+            type="color"
+            id="card-bg-color"
+            name="card-bg-color"
+            value="#ffffff"
+          />
+          <br />
+          <label for="card-border-color">Color del borde</label>
+          <input
+            type="color"
+            id="card-border-color"
+            name="card-border-color"
+            value="#000000"
+          />
+          <br />
+          <button type="submit">Añadir tarjeta</button>
+        </form>
+      </div>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>
