@@ -2,10 +2,11 @@
 //propiedades o atributos
 //clave: valor
 //key: value
-//Mi dato numerico: ¿Es incrementable-disminuible?
+//Mi dato numerico, ¿va como string o number?:
+//Hacete estas dos preguntas: ¿Es incrementable-disminuible?
 //¿Pensas realizarle alguna operacion matematica?
 
-//Preguntas de negocio
+//Preguntas de negocio definen mis datos
 //Quiero ver los autos con 20 años de antiguedad o mas
 //quiero los 5 autos mas viejos
 //quiero los 5 autos mas nuevos
