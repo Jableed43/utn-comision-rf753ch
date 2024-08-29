@@ -55,7 +55,7 @@ function App() {
       <button onClick={() => handleOperation("multiplicar")}>
         Multiplicar
       </button>
-      <button onClick={() => handleOperation("dividir")}>Dividir</button>
+      <button onClick={() => handleOperation("divide")}>Dividir</button>
 
       <div>
         <label>Resultado</label>
