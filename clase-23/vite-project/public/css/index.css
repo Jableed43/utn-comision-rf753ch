@@ -1,0 +1,143 @@
+/* Header */
+body header nav.navClass{
+    background-color: #2d634a !important;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+.navbar-toggler{
+ border: 1px solid white !important;
+}
+
+.navbar-brand img{
+    width: 75px;
+}
+
+.w-100 {
+    height: 65vh;
+}
+
+.card-container{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    padding: 0 15px;
+    margin: 20px 0;
+    justify-content: center
+}
+
+div.card .card-body{
+    padding: 10px;
+}
+
+.index section.services{
+    margin: 40px;
+}
+
+section.galeria{
+    margin: 40px;
+}
+
+.index section.services .services-container{
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+    border: black solid 2px;
+    padding: 19px;
+    border-radius: 15px;
+    margin: 18px 0;
+}
+
+.index section.services h3{
+    font-style: italic;
+    color: #17b056;
+}
+
+.index section.services .even-card{
+    flex-direction: row-reverse;
+}
+
+.index section.services .services-container img{
+    width: 30%;
+    border-radius: 10px;
+    height: 180px;
+}
+
+.index hr{
+    border: none;
+    background: #17b056;
+    height: 4px;
+    opacity: 100;
+}
+
+@media screen and (max-width: 790px) {
+    .card-container{
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 426px) {
+    .card-body{
+        width: 88% !important;
+    }
+
+}
+
+@media screen and (max-width: 600px) {
+
+    .index section.services .services-container img{
+        width: 100%;
+    }
+
+    .index section.services .services-container {
+        gap: 0px;
+        flex-direction: column;
+    }
+    
+}
+
+@media screen and (min-width: 375px){
+    .index section.galeria .galeria-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 18px;
+    }
+
+    .index section.galeria .galeria-img-container{
+        width: 100%;
+        padding: 10px;
+        border: 2px solid gray;
+        border-radius: 3px;
+        box-shadow: black 2px 2px 2px 0.2px;
+    }
+
+    .index section.galeria .galeria-img-container img{
+        width: 100%;
+        color: 'red'
+    }
+
+}
+
+@media screen and (min-width: 768px){
+    .index section.galeria .galeria-img-container{
+        width: 40%;
+    }
+
+    .index section.galeria .galeria-container {
+        flex-direction: row;
+        gap: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+}
+
+@media screen and (min-width: 920px){
+    .index section.galeria .galeria-img-container {
+        width: 17.8%;
+    }
+}
