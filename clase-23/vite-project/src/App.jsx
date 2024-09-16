@@ -1,6 +1,5 @@
 import "../public/css/style.css";
 import Header from "./components/layout/Header";
-import logo from "../public/img/aerolinea.png";
 import Carousel from "./components/Carousel";
 
 function App() {
@@ -41,9 +40,7 @@ function App() {
   return (
     <>
       <Header
-        imageSrc={logo}
         brandUrl="#"
-        imageAlt="Logo Aerolinea"
         navLinks={navLinks}
         dropdownOptions={dropdownOptions}
         dropdownTitle="Más opciones"

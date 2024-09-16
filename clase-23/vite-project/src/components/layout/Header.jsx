@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import planeBrand from "../../../public/img/aerolinea.png";
+
 //Imagen: href de a, src de img, alt de img
 
 //PropTypes permite definir las props, pasarles un tipo
@@ -70,12 +72,31 @@ function Header({
 
 //recuerda que el propTypes del componente se escribe en lower camelCase
 Header.propTypes = {
-  imageSrc: PropTypes.string.isRequired,
-  imageAlt: PropTypes.string.isRequired,
+  imageSrc: PropTypes.string,
+  imageAlt: PropTypes.string,
   brandUrl: PropTypes.string.isRequired,
-  navLinks: PropTypes.array.isRequired,
+  //Con arrayOf especificamos que tiene dentro el array
+  navLinks: PropTypes.arrayOf(
+    PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
   dropdownTitle: PropTypes.string.isRequired,
-  dropdownOptions: PropTypes.array.isRequired,
+  dropdownOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
+  // Como tipar un array de strings:
+  // items: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+//Definimos props por defecto
+Header.defaultProps = {
+  imageSrc: planeBrand,
+  imageAlt: "Imagen Avion",
 };
 
 export default Header;

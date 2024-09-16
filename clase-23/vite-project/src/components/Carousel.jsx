@@ -37,7 +37,6 @@ function Carousel({ slides }) {
             key={index}
             imageAlt={slide.alt}
             imageSrc={slide.image}
-            interval="5000"
             itemDescription={slide.description}
             itemTitle={slide.title}
           />
@@ -66,7 +65,14 @@ function Carousel({ slides }) {
 }
 
 Carousel.propTypes = {
-  slides: PropTypes.array.isRequired,
+  slides: PropTypes.arrayOf(
+    PropTypes.shape({
+      alt: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default Carousel;
