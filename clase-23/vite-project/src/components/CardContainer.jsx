@@ -2,6 +2,10 @@
 import PropTypes from "prop-types";
 import Card from "./Card";
 
+// - Definir props por defecto: Component.defaultProps
+// - Tipar una prop del tipo array: PropTypes.arrayOf
+// - Tipar objetos: PropTypes.shape
+
 function CardContainer({ cards }) {
   const handleCard = title => {
     console.log(title);
