@@ -26,12 +26,12 @@ const ServiceItem = ({
 
 ServiceItem.propTypes = {
   title: PropTypes.string.isRequired,
-  titleColor: PropTypes.string.isRequired,
-  hrColor: PropTypes.string.isRequired,
+  titleColor: PropTypes.string,
+  hrColor: PropTypes.string,
   services: PropTypes.array.isRequired,
   description: PropTypes.string.isRequired,
   imgSrc: PropTypes.string.isRequired,
-  borderColor: PropTypes.string.isRequired,
+  borderColor: PropTypes.string,
   even: PropTypes.bool.isRequired,
 };
 

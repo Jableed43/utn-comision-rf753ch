@@ -22,7 +22,16 @@ const ServiceWrapper = ({ services }) => {
 };
 
 ServiceWrapper.propTypes = {
-  services: PropTypes.array.isRequired,
+  services: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      imgSrc: PropTypes.string.isRequired,
+      titleColor: PropTypes.string,
+      hrColor: PropTypes.string,
+      borderColor: PropTypes.string,
+    })
+  ).isRequired,
 };
 
 export default ServiceWrapper;

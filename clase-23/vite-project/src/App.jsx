@@ -5,6 +5,8 @@ import "./App.css";
 import Carousel from "./components/Carousel";
 import CardContainer from "./components/CardContainer";
 import ServiceWrapper from "./components/ServiceWrapper";
+import GelleryContainer from "./components/GelleryContainer";
+import Footer from "./components/footer";
 
 function App() {
   const navLinks = [
@@ -74,9 +76,6 @@ function App() {
       description:
         "Ofrecemos servicios de transporte ferroviario seguro y eficiente a través de toda la región.",
       imgSrc: "./img/playa.jpg",
-      titleColor: "#17b056",
-      hrColor: "#17b056",
-      borderColor: "black",
     },
     {
       title: "Transporte Aéreo",
@@ -85,7 +84,7 @@ function App() {
       imgSrc: "./img/playa.jpg",
       titleColor: "#ff5733",
       hrColor: "#ff5733",
-      borderColor: "gray",
+      borderColor: "#ff5733",
     },
     {
       title: "Transporte Marítimo",
@@ -143,6 +142,51 @@ function App() {
     },
   ];
 
+  const gallery = [
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+  ];
+
+  // Array de enlaces de navegación
+  const links = [
+    { url: "/about", name: "About Us" },
+    { url: "/contact", name: "Contact" },
+    { url: "/privacy", name: "Privacy Policy" },
+    { url: "/terms", name: "Terms of Service" },
+  ];
+
+  // Array de redes sociales
+  const social = [
+    {
+      url: "https://facebook.com",
+      image: "https://img.icons8.com/ios-filled/50/000000/facebook--v1.png",
+      name: "Facebook",
+    },
+    {
+      url: "https://twitter.com",
+      image: "https://img.icons8.com/ios-filled/50/000000/twitter.png",
+      name: "Twitter",
+    },
+    {
+      url: "https://instagram.com",
+      image: "https://img.icons8.com/ios-filled/50/000000/instagram-new.png",
+      name: "Instagram",
+    },
+    {
+      url: "https://linkedin.com",
+      image: "https://img.icons8.com/ios-filled/50/000000/linkedin.png",
+      name: "LinkedIn",
+    },
+  ];
+
   return (
     <>
       <Header
@@ -155,6 +199,8 @@ function App() {
       <Carousel slides={slides} />
       <CardContainer cards={cards} />
       <ServiceWrapper services={services} />
+      <GelleryContainer images={gallery} title={"Gale"} />
+      <Footer links={links} social={social} />
     </>
   );
 }
