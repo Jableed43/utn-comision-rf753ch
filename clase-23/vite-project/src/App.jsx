@@ -2,6 +2,9 @@ import "../public/css/style.css";
 import Header from "./components/layout/Header";
 import Carousel from "./components/Carousel";
 import CardContainer from "./components/CardContainer";
+import ServiceWrapper from "./components/ServiceWrapper";
+import GalleryContainer from "./components/GalleryContainer";
+import Footer from "./components/layout/Footer";
 
 function App() {
   const navLinks = [
@@ -73,6 +76,108 @@ function App() {
     },
   ];
 
+  const services = [
+    {
+      title: "Transporte Ferroviario",
+      description:
+        "Ofrecemos servicios de transporte ferroviario seguro y eficiente a través de toda la región.",
+      imgSrc: "./img/playa.jpg",
+      titleColor: "#ff5733",
+    },
+    {
+      title: "Transporte Aéreo",
+      description:
+        "Nuestro servicio de transporte aéreo ofrece conexiones rápidas y confiables a nivel internacional.",
+      imgSrc: "./img/playa.jpg",
+      titleColor: "#ff5733",
+    },
+    {
+      title: "Transporte Marítimo",
+      description:
+        "Soluciones de transporte marítimo para envíos de gran volumen a través de rutas internacionales.",
+      imgSrc: "./img/playa.jpg",
+      titleColor: "#0056b3",
+    },
+    {
+      title: "Logística y Almacenamiento",
+      description:
+        "Gestionamos el almacenamiento y distribución de mercancías con altos estándares de seguridad.",
+      imgSrc: "./img/playa.jpg",
+      titleColor: "#8a2be2",
+    },
+    {
+      title: "Transporte Terrestre",
+      description:
+        "Soluciones de transporte terrestre para envíos locales y nacionales con la mejor eficiencia.",
+      imgSrc: "./img/playa.jpg",
+      titleColor: "#ffcc00",
+    },
+    {
+      title: "Consultoría en Logística",
+      description:
+        "Ofrecemos consultoría especializada para optimizar sus operaciones logísticas y de transporte.",
+      imgSrc: "./img/playa.jpg",
+      titleColor: "#d2691e",
+    },
+    {
+      title: "Transporte de Carga Pesada",
+      description:
+        "Servicios especializados en el transporte de cargas de gran tamaño y peso, con seguridad garantizada.",
+      imgSrc: "./img/playa.jpg",
+      titleColor: "#1e90ff",
+    },
+    {
+      title: "Transporte de Mercancías Peligrosas",
+      description:
+        "Manejo seguro de mercancías peligrosas, cumpliendo con todas las regulaciones internacionales.",
+      imgSrc: "./img/playa.jpg",
+      titleColor: "#dc143c",
+    },
+  ];
+
+  const gallery = [
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+    "./img/playa.jpg",
+  ];
+
+  const links = [
+    { url: "/about", name: "Acerca de nosotros" },
+    { url: "/contact", name: "Contacto" },
+    { url: "/privacy", name: "Politica de privacidad" },
+    { url: "/terms", name: "Terminos de servicio" },
+  ];
+
+  const social = [
+    {
+      url: "https://facebook.com",
+      image: "https://img.icons8.com/ios-filled/50/000000/facebook--v1.png",
+      name: "Facebook",
+    },
+    {
+      url: "https://twitter.com",
+      image: "https://img.icons8.com/ios-filled/50/000000/twitter.png",
+      name: "Twitter",
+    },
+    {
+      url: "https://instagram.com",
+      image: "https://img.icons8.com/ios-filled/50/000000/instagram-new.png",
+      name: "Instagram",
+    },
+    {
+      url: "https://linkedin.com",
+      image: "https://img.icons8.com/ios-filled/50/000000/linkedin.png",
+      name: "LinkedIn",
+    },
+  ];
+
   return (
     <>
       <Header
@@ -83,6 +188,9 @@ function App() {
       />
       <Carousel slides={slides} />
       <CardContainer cards={cards} />
+      <ServiceWrapper services={services} />
+      <GalleryContainer images={gallery} title="Galeria de imagenes" />
+      <Footer links={links} socials={social} />
     </>
   );
 }

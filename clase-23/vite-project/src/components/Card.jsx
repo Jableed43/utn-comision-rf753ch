@@ -35,6 +35,7 @@ function Card({
   );
 }
 
+//Tipado de props
 Card.propTypes = {
   image: PropTypes.string,
   imageAlt: PropTypes.string.isRequired,
