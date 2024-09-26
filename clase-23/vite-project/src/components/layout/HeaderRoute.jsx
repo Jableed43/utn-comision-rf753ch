@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 import planeBrand from "../../../public/img/aerolinea.png";
+import { NavLink } from "react-router-dom";
 
 //Imagen: href de a, src de img, alt de img
 
 //PropTypes permite definir las props, pasarles un tipo
 //Si la prop isRequired significa que es obligatoria
 
-function Header({
+function HeaderRoute({
   imageSrc,
   imageAlt,
   brandUrl,
@@ -18,9 +19,9 @@ function Header({
     <header>
       <nav className="navbar navbar-expand-lg bg-body-tertiary navClass">
         <div className="container-fluid">
-          <a className="navbar-brand" href={brandUrl}>
+          <NavLink className="navbar-brand" to={brandUrl}>
             <img src={imageSrc} alt={imageAlt} />
-          </a>
+          </NavLink>
           <button
             className="navbar-toggler"
             type="button"
@@ -36,29 +37,29 @@ function Header({
             <ul className="navbar-nav">
               {navLinks.map((link, index) => (
                 <li className="nav-item" key={index}>
-                  <a className="nav-link" href={link.url}>
+                  <NavLink className="nav-link" to={link.url}>
                     {link.name}
-                  </a>
+                  </NavLink>
                 </li>
               ))}
 
               <li className="nav-item dropdown">
-                <a
+                <NavLink
                   className="nav-link dropdown-toggle"
-                  href="#"
+                  to="#"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   {dropdownTitle}
-                </a>
+                </NavLink>
                 <ul className="dropdown-menu">
                   {dropdownOptions ? (
                     dropdownOptions.map((option, index) => (
                       <li key={index}>
-                        <a className="dropdown-item" href={option.url}>
+                        <NavLink className="dropdown-item" to={option.url}>
                           {option.name}
-                        </a>
+                        </NavLink>
                       </li>
                     ))
                   ) : (
@@ -75,7 +76,7 @@ function Header({
 }
 
 //recuerda que el propTypes del componente se escribe en lower camelCase
-Header.propTypes = {
+HeaderRoute.propTypes = {
   imageSrc: PropTypes.string,
   imageAlt: PropTypes.string,
   brandUrl: PropTypes.string,
@@ -98,9 +99,9 @@ Header.propTypes = {
 };
 
 //Definimos props por defecto
-Header.defaultProps = {
+HeaderRoute.defaultProps = {
   imageSrc: planeBrand,
   imageAlt: "Imagen Avion",
 };
 
-export default Header;
+export default HeaderRoute;
