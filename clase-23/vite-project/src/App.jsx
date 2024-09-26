@@ -5,6 +5,7 @@ import CardContainer from "./components/CardContainer";
 import ServiceWrapper from "./components/ServiceWrapper";
 import GalleryContainer from "./components/GalleryContainer";
 import Footer from "./components/layout/Footer";
+import Characters from "./components/API/Characters";
 
 function App() {
   const navLinks = [
@@ -187,6 +188,7 @@ function App() {
         dropdownTitle="Más opciones"
       />
       <Carousel slides={slides} />
+      <Characters />
       <CardContainer cards={cards} />
       <ServiceWrapper services={services} />
       <GalleryContainer images={gallery} title="Galeria de imagenes" />
