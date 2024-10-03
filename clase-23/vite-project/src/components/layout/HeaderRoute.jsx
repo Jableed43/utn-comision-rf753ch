@@ -44,28 +44,31 @@ function HeaderRoute({
               ))}
 
               <li className="nav-item dropdown">
-                <NavLink
-                  className="nav-link dropdown-toggle"
-                  to="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {dropdownTitle}
-                </NavLink>
-                <ul className="dropdown-menu">
-                  {dropdownOptions ? (
-                    dropdownOptions.map((option, index) => (
-                      <li key={index}>
-                        <NavLink className="dropdown-item" to={option.url}>
-                          {option.name}
-                        </NavLink>
-                      </li>
-                    ))
-                  ) : (
-                    <></>
-                  )}
-                </ul>
+                {dropdownOptions ? (
+                  <>
+                    <NavLink
+                      className="nav-link dropdown-toggle"
+                      to="#"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {dropdownTitle}
+                    </NavLink>
+
+                    <ul className="dropdown-menu">
+                      {dropdownOptions.map((option, index) => (
+                        <li key={index}>
+                          <NavLink className="dropdown-item" to={option.url}>
+                            {option.name}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <></>
+                )}
               </li>
             </ul>
           </div>

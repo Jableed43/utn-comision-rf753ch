@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import CharacterCard from "./CharacterCard";
 
 function Characters() {
   const [characters, setCharacters] = useState([]);
@@ -20,16 +21,11 @@ function Characters() {
   }, []);
 
   return (
-    <>
-      <div>
-        {characters.map((character, index) => (
-          <div key={index}>
-            <p>{character.name}</p>
-            <img src={character.image} alt="image" />
-          </div>
-        ))}
-      </div>
-    </>
+    <div className="charactersContainer">
+      {characters.map((character, index) => (
+        <CharacterCard character={character} key={index} />
+      ))}
+    </div>
   );
 }
 

@@ -78,6 +78,11 @@ hr {
   opacity: 100;
 }
 
+/* Card */
+.card {
+  width: 22%;
+}
+
 /* Footer */
 /* Footer Styles */
 .footer {
@@ -135,6 +140,67 @@ hr {
 
 .footer-bottom p {
   margin: 0;
+}
+
+/* Formulario */
+
+.formTitle {
+  text-align: center;
+  margin: 15px;
+}
+
+.formLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: #2d634a 2px solid;
+  width: 50%;
+  margin: auto;
+  border-radius: 10px;
+  gap: 14px;
+  padding: 8px;
+  margin-bottom: 20px;
+}
+
+.formButtonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.formLayout textarea {
+  width: 70%;
+}
+
+/* Characters Container */
+
+.charactersContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* Character Card */
+.characterCard {
+  text-align: center;
+  border: black solid 2px;
+  font-weight: 700;
+  font-family: cursive;
+}
+
+.characterCard p {
+  margin: 0;
+}
+
+/* Page */
+.pageBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.pageBodyGap {
+  gap: 25px;
 }
 
 @media screen and (max-width: 790px) {
