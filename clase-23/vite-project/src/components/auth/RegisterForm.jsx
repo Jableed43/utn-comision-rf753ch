@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { addUser } from "../API/users/addUser";
 
-const apiUrl = import.meta.env.REACT_APP_BASE_URL_USERS;
+const apiUrl = import.meta.env;
 
 function RegisterForm() {
   const [formData, setFormData] = useState({
