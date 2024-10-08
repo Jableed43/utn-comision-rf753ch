@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { addUser } from "../API/users/addUser";
 
-const apiUrl = import.meta.env;
+const apiUrl = import.meta.env.VITE_BASE_URL_USERS;
 
 function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -57,6 +57,9 @@ function RegisterForm() {
 
       <label htmlFor="gender">Sexo</label>
       <select name="gender" value={formData.gender} onChange={handleChange}>
+        <option value="#" selected>
+          Seleccione Genero
+        </option>
         <option value="M">Masculino</option>
         <option value="F">Femenino</option>
         <option value="NB">No binario</option>
