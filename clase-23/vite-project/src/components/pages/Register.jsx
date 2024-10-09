@@ -3,7 +3,7 @@ import Page from "../layout/page";
 
 function Register() {
   return (
-    <Page>
+    <Page gap={10}>
       <RegisterForm />
     </Page>
   );

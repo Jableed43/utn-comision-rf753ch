@@ -2,7 +2,7 @@ import Page from "../layout/page";
 
 function Contact() {
   return (
-    <Page>
+    <Page gap={10}>
       <form className="formLayout">
         <h4 className="formTitle">Escribinos para consultarnos</h4>
 

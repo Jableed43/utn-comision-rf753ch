@@ -81,6 +81,9 @@ function LoginForm() {
         </button>
         <button type="reset">Borrar</button>
       </div>
+      <p>
+        ¿No tienes cuenta? <a href="/register">¡Registrate!</a>
+      </p>
     </form>
   );
 }

@@ -3,7 +3,7 @@ import Page from "../layout/page";
 
 function Login() {
   return (
-    <Page>
+    <Page gap={10}>
       <LoginForm />
     </Page>
   );

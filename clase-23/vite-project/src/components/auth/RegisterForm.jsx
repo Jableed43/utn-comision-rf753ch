@@ -78,6 +78,10 @@ function RegisterForm() {
         <button type="submit">Enviar</button>
         <button type="reset">Borrar</button>
       </div>
+
+      <p>
+        ¿Ya tienes cuenta? <a href="/login">¡Ingresá!</a>
+      </p>
     </form>
   );
 }

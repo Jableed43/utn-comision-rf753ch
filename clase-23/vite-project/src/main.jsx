@@ -9,6 +9,7 @@ import Login from "./components/pages/Login.jsx";
 import Register from "./components/pages/Register.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
+import RestrictedRoute from "./components/auth/RestrictedRoute.jsx";
 
 //Escribimos en objetos el path y el element a utilizar para crear las rutas
 //Con errorElement decidimos como se mostrará el error cuando suceda
@@ -28,12 +29,17 @@ const routes = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
+    element: <RestrictedRoute />,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+    ],
   },
   {
     path: "/contacto",
