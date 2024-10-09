@@ -1,5 +1,5 @@
 import RegisterForm from "../auth/RegisterForm";
-import Page from "../layout/page";
+import Page from "../layout/Page";
 
 function Register() {
   return (

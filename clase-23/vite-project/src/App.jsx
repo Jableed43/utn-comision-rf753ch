@@ -3,7 +3,7 @@ import Carousel from "./components/Carousel";
 import CardContainer from "./components/CardContainer";
 import ServiceWrapper from "./components/ServiceWrapper";
 import GalleryContainer from "./components/GalleryContainer";
-import Page from "./components/layout/page";
+import Page from "./components/layout/Page";
 import { cards, gallery, services, slideData } from "./data/data";
 
 function App() {

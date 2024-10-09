@@ -1,4 +1,4 @@
-import Page from "../layout/page";
+import Page from "../layout/Page";
 import Characters from "../API/Characters";
 
 function Products() {

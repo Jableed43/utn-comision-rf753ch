@@ -1,4 +1,4 @@
-import Page from "../layout/page";
+import Page from "../layout/Page";
 
 function Contact() {
   return (

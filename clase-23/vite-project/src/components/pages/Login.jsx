@@ -1,5 +1,5 @@
 import LoginForm from "../auth/LoginForm";
-import Page from "../layout/page";
+import Page from "../layout/Page";
 
 function Login() {
   return (
