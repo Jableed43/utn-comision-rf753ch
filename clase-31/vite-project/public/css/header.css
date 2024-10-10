@@ -1,0 +1,19 @@
+/* Disponemos en horizontal los elementos del ul */
+header {
+  border: 2px solid black;
+}
+
+header nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+/* Esto elimina los puntos de los li en la ul */
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
