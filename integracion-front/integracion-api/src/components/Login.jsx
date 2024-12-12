@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import useLoginUser from '../hooks/user/useLoginUser';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-
+  
   const { loginUser } = useLoginUser()
+  const navigate = useNavigate()
+
 
   const [form, setForm] = useState({
     email: "",
@@ -16,10 +19,15 @@ function Login() {
     console.log(success)
   }
 
+  const handleNoUser = () => {
+    navigate("/register")
+  }
+
    return (
     <>
     <section className='formContainer'>
     <h2>Login</h2>
+  <p> ¿No posees usuario? <span style={{ color: 'blue', cursor: 'pointer' }} onClick={handleNoUser}>¡Crealo!</span></p>
     <br />
     <form onSubmit={handleLogin} >
       <div>
