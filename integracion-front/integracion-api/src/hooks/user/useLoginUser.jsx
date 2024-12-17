@@ -15,7 +15,7 @@ function useLoginUser() {
 
             if (response.ok) {
                 const data = await response.json()
-                localStorage.setItem("token", data.token)
+                localStorage.setItem("token-utn", data.token)
                 return true
             } else {
                 setError(response.statusText)

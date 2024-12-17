@@ -1,23 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import  { useCallback, useEffect, useState } from 'react'
 import useFetchUser from '../../hooks/user/useFetchUser'
 
 function Users() {
     const [users, setUsers] = useState([])
     const { fetchUser, done } = useFetchUser()
 
-    const getUsers = async () => {
-        const data = await fetchUser()
-        setUsers(data)
-        console.log(data)
+   const fetchUsersCallback = useCallback(async () => {
+    if(!done){
+      const data = await fetchUser()
+      setUsers(data)
     }
+  }, [fetchUser, done])
 
     useEffect(() => {
-        getUsers()
-    }, [fetchUser])
+      fetchUsersCallback()
+    }, [fetchUsersCallback])
+
+    console.log(done)
 
   return (
 
     <div>
+      <h2>Mis usuarios</h2>
       { users ? (
         users.map(user => (
             <p key={user._id}>{user.name}</p>

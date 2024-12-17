@@ -15,9 +15,9 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const success = await loginUser(form)
-    console.log(success)
+    await loginUser(form)
   }
+
 
   const handleNoUser = () => {
     navigate("/register")
