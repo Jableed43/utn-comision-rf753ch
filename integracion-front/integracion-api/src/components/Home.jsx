@@ -1,15 +1,20 @@
-import Login from './Login'
-import Users from './admin/Users'
-import Products from './products/Products'
+import { Link } from 'react-router-dom'
+import { useAuth } from './auth/AuthProvider'
 
 function Home() {
+  const { logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+  }
 
    return (
     <>
+    <button onClick={handleLogout} > Logout </button>
     <h1>¡Bienvenid@ a nuestro sitio!</h1>
-    <Login />
-    <Users />
-    <Products />
+    <Link to="/users"> Usuarios </Link>
+    <br />
+    <Link to="/products"> Productos </Link>
     </>
   )
 }

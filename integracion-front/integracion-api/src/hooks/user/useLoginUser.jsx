@@ -18,6 +18,7 @@ function useLoginUser() {
                 localStorage.setItem("token-utn", data.token)
                 return true
             } else {
+                console.log({response})
                 setError(response.statusText)
                 return false
             }

@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import useLoginUser from '../hooks/user/useLoginUser';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './auth/AuthProvider';
+
+//nice to have: mostrar contraseña / ocultar en input de password
 
 function Login() {
   
-  const { loginUser } = useLoginUser()
+  const { login, error } = useAuth()
   const navigate = useNavigate()
-
 
   const [form, setForm] = useState({
     email: "",
@@ -15,9 +16,12 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    await loginUser(form)
+   const success = await login(form)
+   console.log(success)
+   if(success){
+    navigate("/home")
+   }
   }
-
 
   const handleNoUser = () => {
     navigate("/register")
@@ -45,6 +49,9 @@ function Login() {
       <button type="submit">Login</button>
 
     </form>
+
+    { error && <p style={{color: "red"}} > Error: {error} </p> }
+
     </section>
     </>
   )

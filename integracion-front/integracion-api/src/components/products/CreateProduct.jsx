@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCreateProduct from "../../hooks/product/useCreateProduct";
+import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
+import useEditProduct from "../../hooks/product/useEditProduct";
 
 const statusEnum = ["AVAILABLE", "NOT AVAILABLE", "DISCONTINUED"];
+
+// nice to have : traer categorias
 
 const productCategories = [
   {
@@ -14,8 +19,10 @@ const productCategories = [
   },
 ];
 
-function CreateProduct() {
+function CreateProduct({ productToEdit }) {
     const { createProduct } = useCreateProduct()
+    const navigate = useNavigate()
+    const { editProduct } = useEditProduct()
   const [form, setForm] = useState({
     name: "",
     price: 0,
@@ -27,15 +34,27 @@ function CreateProduct() {
     stock: 0,
   });
 
+  useEffect( () => {
+    if(productToEdit){
+      setForm(productToEdit)
+    }
+  }, [productToEdit] )
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-  const response = await createProduct(form)
-  console.log(response)
+    //espera dos segundos antes de redirigir
+    if(!productToEdit){
+    await createProduct(form)
+    setTimeout( () => {
+      navigate(-1)
+    }, 2000 )
+  }
+  editProduct(productToEdit._id, form)
   }
 
   return (
     <section>
-      <h2>Crear producto</h2>
+      { productToEdit ? <h2>Editar producto</h2> : <h2>Crear producto</h2> }
       <br />
       <form onSubmit={handleSubmit}>
         <div>
@@ -140,10 +159,16 @@ function CreateProduct() {
           />
         </div>
 
-            <button type="submit"> Create Product </button>
+            <button type="submit"> { productToEdit ? "Editar" : "Crear" } </button>
+
       </form>
     </section>
   );
 }
 
 export default CreateProduct;
+
+
+CreateProduct.propTypes = {
+  productToEdit: PropTypes.object,
+};

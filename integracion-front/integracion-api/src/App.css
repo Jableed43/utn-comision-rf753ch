@@ -1,0 +1,13 @@
+.product-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+.product-container div{
+    width: 180px;
+    padding: 8px;
+}
