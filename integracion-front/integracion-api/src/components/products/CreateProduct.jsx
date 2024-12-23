@@ -1,28 +1,32 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import useFetchCategory from "../../hooks/category/useFetchCategory";
 import useCreateProduct from "../../hooks/product/useCreateProduct";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import useEditProduct from "../../hooks/product/useEditProduct";
+import useFetchStatus from "../../hooks/product/useFetchStatus";
+import { statusTranslations } from "./status";
 
-const statusEnum = ["AVAILABLE", "NOT AVAILABLE", "DISCONTINUED"];
+function CreateProduct({ productToEdit, onProductUpdated }) { // Recibe el callback onProductUpdated
+  const { createProduct } = useCreateProduct();
+  const { editProduct } = useEditProduct();
 
-// nice to have : traer categorias
+  const navigate = useNavigate();
 
-const productCategories = [
-  {
-    _id: "6747a0c51882eb0c02be520c",
-    name: "calzado",
-  },
-  {
-    _id: "6747a9766ad4687d2a6fb0bd",
-    name: "herramientas",
-  },
-];
+  const {
+    categories,
+    error: categoryError,
+    fetchCategory,
+    done: categoriesLoaded,
+  } = useFetchCategory();
 
-function CreateProduct({ productToEdit }) {
-    const { createProduct } = useCreateProduct()
-    const navigate = useNavigate()
-    const { editProduct } = useEditProduct()
+  const {
+    statusOptions,
+    error: statusError,
+    fetchStatus,
+    done: statusLoaded,
+  } = useFetchStatus();
+
   const [form, setForm] = useState({
     name: "",
     price: 0,
@@ -34,27 +38,52 @@ function CreateProduct({ productToEdit }) {
     stock: 0,
   });
 
-  useEffect( () => {
-    if(productToEdit){
-      setForm(productToEdit)
+  // Cargar categorías solo una vez al montar el componente
+  useEffect(() => {
+    if (!categoriesLoaded) {
+      fetchCategory(); // Llamar a `fetchCategory` solo si las categorías no están cargadas
     }
-  }, [productToEdit] )
+  }, [categoriesLoaded, fetchCategory]);
+
+  // Cargar estados solo una vez al montar el componente
+  useEffect(() => {
+    if (!statusLoaded) {
+      fetchStatus(); // Llamar a `fetchStatus` solo si los estados no están cargados
+    }
+  }, [statusLoaded, fetchStatus]);
+
+  // Sincronizar el formulario con `productToEdit`
+  useEffect(() => {
+    if (productToEdit) {
+      setForm({
+        ...productToEdit,
+        category: productToEdit.category?._id || "",
+      });
+    }
+  }, [productToEdit]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    //espera dos segundos antes de redirigir
-    if(!productToEdit){
-    await createProduct(form)
-    setTimeout( () => {
-      navigate(-1)
-    }, 2000 )
-  }
-  editProduct(productToEdit._id, form)
-  }
+    e.preventDefault();
+    if (!productToEdit) {
+      // Crear nuevo producto
+      await createProduct(form);
+      if (onProductUpdated) {
+      onProductUpdated();  // Solo llamar a onProductUpdated si existe
+    }
+      navigate("/products")
+      console.log('navigate')
+    } else {
+      // Editar producto
+      await editProduct(productToEdit._id, form);
+      if (onProductUpdated) {
+      onProductUpdated();  // Solo llamar a onProductUpdated si existe
+    }
+    }
+  };
 
   return (
     <section>
-      { productToEdit ? <h2>Editar producto</h2> : <h2>Crear producto</h2> }
+      {productToEdit ? <h2>Editar producto</h2> : <h2>Crear producto</h2>}
       <br />
       <form onSubmit={handleSubmit}>
         <div>
@@ -80,12 +109,12 @@ function CreateProduct({ productToEdit }) {
         </div>
 
         <div>
-          <label htmlFor="profit">Profit rate</label>
+          <label htmlFor="profitRate">Profit rate</label>
           <input
             type="number"
-            name="profit"
-            value={form.profit}
-            onChange={(e) => setForm({ ...form, profit: e.target.value })}
+            name="profitRate"
+            value={form.profitRate}
+            onChange={(e) => setForm({ ...form, profitRate: e.target.value })}
           />
         </div>
 
@@ -101,7 +130,7 @@ function CreateProduct({ productToEdit }) {
         </div>
 
         <div>
-          <label htmlFor="status">Product Status</label>
+          <label htmlFor="status">Estado del Producto</label>
           <select
             name="status"
             value={form.status}
@@ -109,14 +138,19 @@ function CreateProduct({ productToEdit }) {
             required
           >
             <option value="" disabled>
-              Select Status
+              Seleccionar Estado
             </option>
-            {statusEnum.map((status) => (
+            {statusOptions.map((status) => (
               <option key={status} value={status}>
-                {status.toLowerCase()}
+                {statusTranslations[status] || status}
               </option>
             ))}
           </select>
+          {statusError && (
+            <p style={{ color: "red" }}>
+              Error cargando opciones de estado: {statusError}
+            </p>
+          )}
         </div>
 
         <div>
@@ -129,21 +163,25 @@ function CreateProduct({ productToEdit }) {
             <option value="" disabled>
               Select Category
             </option>
-            {productCategories.map((category) => (
+            {categories.map((category) => (
               <option key={category._id} value={category._id}>
                 {category.name.toLowerCase()}
               </option>
             ))}
           </select>
+          {categoryError && (
+            <p style={{ color: "red" }}>
+              Error loading categories: {categoryError}
+            </p>
+          )}
         </div>
 
         <div>
-          <label htmlFor="highlighted">¿Is your product highLighted?</label>
+          <label htmlFor="highlighted">¿Is your product highlighted?</label>
           <input
             type="checkbox"
             name="highlighted"
-            value={form.highlighted}
-            // checked={form.highlighted}
+            checked={form.highlighted}
             onChange={(e) => setForm({ ...form, highlighted: e.target.checked })}
           />
         </div>
@@ -159,8 +197,7 @@ function CreateProduct({ productToEdit }) {
           />
         </div>
 
-            <button type="submit"> { productToEdit ? "Editar" : "Crear" } </button>
-
+        <button type="submit">{productToEdit ? "Editar" : "Crear"}</button>
       </form>
     </section>
   );
@@ -168,7 +205,7 @@ function CreateProduct({ productToEdit }) {
 
 export default CreateProduct;
 
-
 CreateProduct.propTypes = {
   productToEdit: PropTypes.object,
+  onProductUpdated: PropTypes.func.isRequired, // Asegúrate de que `onProductUpdated` sea obligatorio
 };
