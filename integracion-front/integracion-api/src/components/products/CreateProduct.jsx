@@ -3,26 +3,17 @@ import useCreateProduct from "../../hooks/product/useCreateProduct";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import useEditProduct from "../../hooks/product/useEditProduct";
-
-const statusEnum = ["AVAILABLE", "NOT AVAILABLE", "DISCONTINUED"];
-
-// nice to have : traer categorias
-
-const productCategories = [
-  {
-    _id: "6747a0c51882eb0c02be520c",
-    name: "calzado",
-  },
-  {
-    _id: "6747a9766ad4687d2a6fb0bd",
-    name: "herramientas",
-  },
-];
+import useFetchCategory from "../../hooks/category/useFetchCategory";
+import useFetchStatus from "../../hooks/product/useFetchStatus";
+import { statusTranslations } from "./statusTranslate"
 
 function CreateProduct({ productToEdit }) {
     const { createProduct } = useCreateProduct()
     const navigate = useNavigate()
     const { editProduct } = useEditProduct()
+  const { categories, error: categoryError, fetchCategory, done: categoriesLoaded } = useFetchCategory()
+  const { status, error: statusError, fetchStatus, done: statusLoaded } = useFetchStatus()
+
   const [form, setForm] = useState({
     name: "",
     price: 0,
@@ -33,6 +24,18 @@ function CreateProduct({ productToEdit }) {
     highlighted: false,
     stock: 0,
   });
+
+  useEffect(() => {
+    if(!categoriesLoaded){
+      fetchCategory()
+    }
+  }, [categoriesLoaded, fetchCategory])
+
+  useEffect(() => {
+    if(!statusLoaded){
+      fetchStatus()
+    }
+  }, [statusLoaded, fetchStatus])
 
   useEffect( () => {
     if(productToEdit){
@@ -80,12 +83,12 @@ function CreateProduct({ productToEdit }) {
         </div>
 
         <div>
-          <label htmlFor="profit">Profit rate</label>
+          <label htmlFor="profitRate">Profit rate</label>
           <input
             type="number"
-            name="profit"
-            value={form.profit}
-            onChange={(e) => setForm({ ...form, profit: e.target.value })}
+            name="profitRate"
+            value={form.profitRate}
+            onChange={(e) => setForm({ ...form, profitRate: e.target.value })}
           />
         </div>
 
@@ -111,12 +114,14 @@ function CreateProduct({ productToEdit }) {
             <option value="" disabled>
               Select Status
             </option>
-            {statusEnum.map((status) => (
+            {status.map((status) => (
               <option key={status} value={status}>
-                {status.toLowerCase()}
+                {/* Si queremos traducir los status que nos manda la api */}
+                { statusTranslations[status] || status }
               </option>
             ))}
           </select>
+          { statusError && ( <p style={{ color: 'red' }} > Error cargando opciones de estado  </p> ) }
         </div>
 
         <div>
@@ -129,12 +134,13 @@ function CreateProduct({ productToEdit }) {
             <option value="" disabled>
               Select Category
             </option>
-            {productCategories.map((category) => (
+            {categories.map((category) => (
               <option key={category._id} value={category._id}>
                 {category.name.toLowerCase()}
               </option>
             ))}
           </select>
+          { categoryError && ( <p style={{ color: 'red' }}> Error al cargar las categorias: {categoryError} </p> ) }
         </div>
 
         <div>
@@ -142,7 +148,7 @@ function CreateProduct({ productToEdit }) {
           <input
             type="checkbox"
             name="highlighted"
-            value={form.highlighted}
+            checked={form.highlighted}
             // checked={form.highlighted}
             onChange={(e) => setForm({ ...form, highlighted: e.target.checked })}
           />

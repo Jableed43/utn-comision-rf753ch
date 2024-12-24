@@ -6,6 +6,7 @@ import CreateProduct from "./components/products/CreateProduct"
 import ProtectedRoute from "./components/auth/ProtectedRoute"
 import Users from "./components/admin/Users"
 import Products from "./components/products/Products"
+import NotFound from "./components/NotFound"
 
 export const router = createBrowserRouter([
 
@@ -48,6 +49,9 @@ export const router = createBrowserRouter([
                 <Products />
             </ProtectedRoute>
         )
+    },
+    {
+        path: "*",
+        element: <NotFound />
     }
-
 ])
