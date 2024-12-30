@@ -8,9 +8,9 @@ import useFetchStatus from "../../hooks/product/useFetchStatus";
 import { statusTranslations } from "./statusTranslate"
 
 function CreateProduct({ productToEdit }) {
-    const { createProduct } = useCreateProduct()
-    const navigate = useNavigate()
-    const { editProduct } = useEditProduct()
+  const { createProduct } = useCreateProduct()
+  const navigate = useNavigate()
+  const { editProduct } = useEditProduct()
   const { categories, error: categoryError, fetchCategory, done: categoriesLoaded } = useFetchCategory()
   const { status, error: statusError, fetchStatus, done: statusLoaded } = useFetchStatus()
 
@@ -26,38 +26,46 @@ function CreateProduct({ productToEdit }) {
   });
 
   useEffect(() => {
-    if(!categoriesLoaded){
+    if (!categoriesLoaded) {
       fetchCategory()
     }
   }, [categoriesLoaded, fetchCategory])
 
   useEffect(() => {
-    if(!statusLoaded){
+    if (!statusLoaded) {
       fetchStatus()
     }
   }, [statusLoaded, fetchStatus])
 
-  useEffect( () => {
-    if(productToEdit){
-      setForm(productToEdit)
+  useEffect(() => {
+    if (productToEdit) {
+      // Normaliza el campo `category` para que contenga solo el `_id`
+      const normalizedProduct = {
+        ...productToEdit,
+        category: productToEdit.category?._id || "", // Extrae el `_id` de la categoría
+      };
+      setForm(normalizedProduct);
     }
-  }, [productToEdit] )
+  }, [productToEdit]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    //espera dos segundos antes de redirigir
-    if(!productToEdit){
-    await createProduct(form)
-    setTimeout( () => {
-      navigate(-1)
-    }, 2000 )
-  }
-  editProduct(productToEdit._id, form)
-  }
+    e.preventDefault();
+  
+    if (!productToEdit) {
+      // Crear producto
+      await createProduct(form);
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    } else {
+      // Editar producto
+      await editProduct(productToEdit._id, form);
+    }
+  };
 
   return (
     <section>
-      { productToEdit ? <h2>Editar producto</h2> : <h2>Crear producto</h2> }
+      {productToEdit ? <h2>Editar producto</h2> : <h2>Crear producto</h2>}
       <br />
       <form onSubmit={handleSubmit}>
         <div>
@@ -117,18 +125,18 @@ function CreateProduct({ productToEdit }) {
             {status.map((status) => (
               <option key={status} value={status}>
                 {/* Si queremos traducir los status que nos manda la api */}
-                { statusTranslations[status] || status }
+                {statusTranslations[status] || status}
               </option>
             ))}
           </select>
-          { statusError && ( <p style={{ color: 'red' }} > Error cargando opciones de estado  </p> ) }
+          {statusError && (<p style={{ color: 'red' }} > Error cargando opciones de estado  </p>)}
         </div>
 
         <div>
           <label htmlFor="category">Product Category</label>
           <select
             name="category"
-            value={form.category}
+            value={form.category || ""} // Asegura que siempre haya un valor
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           >
             <option value="" disabled>
@@ -140,7 +148,11 @@ function CreateProduct({ productToEdit }) {
               </option>
             ))}
           </select>
-          { categoryError && ( <p style={{ color: 'red' }}> Error al cargar las categorias: {categoryError} </p> ) }
+          {categoryError && (
+            <p style={{ color: 'red' }}>
+              Error al cargar las categorías: {categoryError}
+            </p>
+          )}
         </div>
 
         <div>
@@ -165,7 +177,7 @@ function CreateProduct({ productToEdit }) {
           />
         </div>
 
-            <button type="submit"> { productToEdit ? "Editar" : "Crear" } </button>
+        <button type="submit"> {productToEdit ? "Editar" : "Crear"} </button>
 
       </form>
     </section>
@@ -173,7 +185,6 @@ function CreateProduct({ productToEdit }) {
 }
 
 export default CreateProduct;
-
 
 CreateProduct.propTypes = {
   productToEdit: PropTypes.object,

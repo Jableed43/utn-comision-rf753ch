@@ -4,7 +4,8 @@ function useDeleteProduct() {
     const [error, setError] = useState()
 
     const deleteProduct = async (id) => {
-        const initialUrl = "http://localhost:3000/api/product/delete/"
+        const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}/product/delete/`;
+
         const token = localStorage.getItem("token-utn")
         try {
           const response = await fetch(`${initialUrl}${id}`, {

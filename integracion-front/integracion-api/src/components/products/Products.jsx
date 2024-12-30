@@ -1,73 +1,127 @@
-import { useCallback, useEffect, useState } from "react"
-import useFetchProduct from "../../hooks/product/useFetchProduct"
-import useDeleteProduct from "../../hooks/product/useDeleteProduct"
-import { Link, useNavigate } from "react-router-dom"
-import "../../App.css"
-import CreateProduct from "./CreateProduct"
-//nice to have: refetch
+import { useCallback, useEffect, useState } from "react";
+import useFetchProduct from "../../hooks/product/useFetchProduct";
+import useDeleteProduct from "../../hooks/product/useDeleteProduct";
+import { Link, useNavigate } from "react-router-dom";
+import "../../App.css";
+import CreateProduct from "./CreateProduct";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import { statusTranslations } from "./statusTranslate";
 
 function Products() {
-  const [products, setProducts] = useState([])
-  const [editingProduct, setEditingProduct] = useState(null)
+  const [products, setProducts] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null);
 
-  const navigate = useNavigate()
-  const { deleteProduct, error } = useDeleteProduct()
-
-  const { fetchProduct, done } = useFetchProduct()
+  const navigate = useNavigate();
+  const { deleteProduct, error } = useDeleteProduct();
+  const { fetchProduct, done } = useFetchProduct();
 
   const fetchProductsCallback = useCallback(async () => {
     if (!done) {
-      const data = await fetchProduct()
-      setProducts(data)
+      const data = await fetchProduct();
+      setProducts(data);
     }
-  }, [fetchProduct, done])
+  }, [fetchProduct, done]);
 
   useEffect(() => {
-    fetchProductsCallback()
-  }, [fetchProductsCallback])
+    fetchProductsCallback();
+  }, [fetchProductsCallback]);
 
   const handleGoBack = () => {
-    navigate(-1)
-  }
+    navigate(-1);
+  };
 
-  const handleDelete = (id) => {
-    deleteProduct(id)
-  }
+  const handleDelete = async (id) => {
+    await deleteProduct(id); // Eliminar producto
+    fetchProductsCallback(); // Refrescar lista después de eliminar
+  };
 
   const handleEdit = (product) => {
-    setEditingProduct(product)
-  }
-
+    setEditingProduct(product); // Solo establece el producto a editar
+  };
 
   return (
     <section>
-
-      <button onClick={handleGoBack} >Volver Atras</button>
-      <Link to="/create-product"> Crear producto nuevo </Link>
+      <Button variant="contained" color="primary" onClick={handleGoBack} style={{ marginBottom: "16px" }}>
+        Volver Atrás
+      </Button>
+      <Link to="/create-product" style={{ textDecoration: "none" }}>
+        <Button variant="contained" color="secondary" style={{ marginBottom: "16px" }}>
+          Crear producto nuevo
+        </Button>
+      </Link>
       <h2>Productos</h2>
 
-      {editingProduct && <CreateProduct productToEdit={editingProduct} /> }
+      {/* Si estamos editando un producto, mostrar el formulario de edición */}
+      {editingProduct && <CreateProduct productToEdit={editingProduct} />}
 
-      <div className="product-container">
-      {products.length === 0 ? <p>No hay productos</p> : (products.map(product => (
-        <div key={product._id} style={{ border: 'solid black' }} >
-          <p> Nombre: {product.name} </p>
-          <p> Precio: {product.price} </p>
-          <p> Descripcion: {product.description} </p>
-          <p> Status: {product.status} </p>
-          {product.category ? (<p> Categoria:  {product.category.name} </p>) : <></>}
-          {product.highlighted == true ? (<p> Producto destacado </p>) : <></>}
-          <p> Stock disponible {product.stock} </p>
-          <button onClick={ () => handleEdit(product)} >Editar</button>
-          <button onClick={ () => handleDelete(product._id) } >Eliminar</button>
-        </div>
-      )))}
-      </div>
+      {/* Tabla de productos */}
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650, border: "solid black" }} aria-label="product table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Nombre</TableCell>
+              <TableCell align="center">Precio</TableCell>
+              <TableCell align="center">Descripción</TableCell>
+              <TableCell align="center">Categoría</TableCell>
+              <TableCell align="center">Estado</TableCell>
+              <TableCell align="center">Destacado</TableCell>
+              <TableCell align="center">Stock</TableCell>
+              <TableCell align="center">Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {products.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={8} align="center">
+                  No hay productos
+                </TableCell>
+              </TableRow>
+            ) : (
+              products.map((product) => (
+                <TableRow key={product._id}>
+                  <TableCell align="center">{product.name}</TableCell>
+                  <TableCell align="center">{product.price}</TableCell>
+                  <TableCell align="center">{product.description}</TableCell>
+                  <TableCell align="center">{product.category?.name || "Sin categoría"}</TableCell>
+                  <TableCell align="center">{statusTranslations[product.status] || product.status}</TableCell>
+                  <TableCell align="center">{product.highlighted ? "Sí" : "No"}</TableCell>
+                  <TableCell align="center">{product.stock}</TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => handleEdit(product)}
+                      style={{ marginRight: "8px" }}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => handleDelete(product._id)}
+                    >
+                      Eliminar
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-      { error && <p style={{color: 'red'}}> Error {error} </p> }
-
+      {error && <p style={{ color: "red" }}>Error: {error}</p>}
     </section>
-  )
+  );
 }
 
-export default Products
+export default Products;

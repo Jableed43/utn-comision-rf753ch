@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function useCreateProduct() {
     const [error, setError] = useState();
-    const initialUrl = "http://localhost:3000/api/product/create";
+    const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}/product/create/`;
 
     const createProduct = async (formData) => {
         try {

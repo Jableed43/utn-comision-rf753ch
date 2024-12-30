@@ -4,7 +4,8 @@ function useEditProduct() {
     const [error, setError] = useState()
 
     const editProduct = async (id, formData) => {
-        const initialUrl = "http://localhost:3000/api/product/update/"
+        const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}/product/update/`;
+
         const token = localStorage.getItem("token-utn")
         try {
           const response = await fetch(`${initialUrl}${id}`, {

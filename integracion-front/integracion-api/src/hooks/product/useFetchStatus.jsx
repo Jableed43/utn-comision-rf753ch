@@ -4,7 +4,7 @@ function useFetchStatus() {
     const [error, setError] = useState(null)
     const [done, setDone] = useState(false)
     const [ status, setStatus ] = useState([])
-    const initialUrl = "http://localhost:3000/api/product/status";
+    const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}/product/status/`;
 
     const fetchStatus = async () => {
         try {

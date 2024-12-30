@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function useFetchCategory() {
-    
+    const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}/category/get/`;
     //categories sirve para guardar los datos que traigo de la api
     const [categories, setCategories] = useState([])
     //error es para manejar los mensajes de errores y pasarlos a mis componentes
@@ -21,7 +21,7 @@ function useFetchCategory() {
 
         try {
             const token = localStorage.getItem("token-utn")
-            const response = await fetch("http://localhost:3000/api/category/get", {
+            const response = await fetch(initialUrl, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
