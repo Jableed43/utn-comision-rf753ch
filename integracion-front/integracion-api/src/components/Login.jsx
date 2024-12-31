@@ -14,6 +14,8 @@ function Login() {
     password: ""
   })
 
+  const [showPassword, setShowPassword] = useState(false)
+
   const handleLogin = async (e) => {
     e.preventDefault();
    const success = await login(form)
@@ -25,6 +27,10 @@ function Login() {
 
   const handleNoUser = () => {
     navigate("/register")
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
 
    return (
@@ -42,8 +48,9 @@ function Login() {
 
       <div>
       <label htmlFor="password">Password</label>
-      <input type="password" name="password" required value={form.password}
+      <input type={ showPassword ? "text" : "password" } name="password" required value={form.password}
       onChange={e => setForm({...form, password: e.target.value}) }/>
+      <button type='button' style={{background: 'none', border: 'none', cursor: 'pointer' }} onClick={togglePasswordVisibility} >  {showPassword ? "🙈" : "👁️"} </button>
       </div>
 
       <button type="submit">Login</button>

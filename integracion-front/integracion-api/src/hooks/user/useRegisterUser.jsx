@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function useRegisterUser() {
     const [error, setError] = useState();
-    const initialUrl = "http://localhost:3000/api/user/create";
+    const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}user/create`;
 
     const registerUser = async (formData) => {
         try {

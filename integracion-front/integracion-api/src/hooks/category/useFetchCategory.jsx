@@ -18,10 +18,11 @@ function useFetchCategory() {
         if(loading || done) return;
         //iniciamos la carga
         setLoading(true)
+        const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}category/get`
 
         try {
             const token = localStorage.getItem("token-utn")
-            const response = await fetch("http://localhost:3000/api/category/get", {
+            const response = await fetch(initialUrl, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`

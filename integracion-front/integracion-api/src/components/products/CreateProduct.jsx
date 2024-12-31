@@ -39,7 +39,11 @@ function CreateProduct({ productToEdit }) {
 
   useEffect( () => {
     if(productToEdit){
-      setForm(productToEdit)
+      const normalizedProduct = {
+        ...productToEdit,
+        category: productToEdit.category?._id || "",
+      }
+      setForm(normalizedProduct)
     }
   }, [productToEdit] )
 
@@ -128,7 +132,7 @@ function CreateProduct({ productToEdit }) {
           <label htmlFor="category">Product Category</label>
           <select
             name="category"
-            value={form.category}
+            value={form.category || ""}
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           >
             <option value="" disabled>

@@ -3,7 +3,7 @@ import { useState } from "react";
 function useFetchUser() {
     const [error, setError] = useState()
     const [done, setDone] = useState()
-    const initialUrl = "http://localhost:3000/api/user/get";
+    const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}user/get`;
 
     const fetchUser = async () => {
         try {

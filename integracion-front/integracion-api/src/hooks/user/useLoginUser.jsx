@@ -2,7 +2,8 @@ import { useState } from "react"
 
 function useLoginUser() {
     const [error, setError] = useState();
-    const initialUrl = "http://localhost:3000/api/user/login"
+    const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}user/login`;
+
     const loginUser = async formData => {
         try {
             const response = await fetch(initialUrl, {

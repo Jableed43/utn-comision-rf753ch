@@ -3,7 +3,7 @@ import { useState } from "react";
 function useFetchProduct() {
     const [error, setError] = useState()
     const [done, setDone] = useState()
-    const initialUrl = "http://localhost:3000/api/product/get";
+    const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}product/get`;
 
     const fetchProduct = async () => {
         try {

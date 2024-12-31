@@ -4,6 +4,7 @@ import useDeleteProduct from "../../hooks/product/useDeleteProduct"
 import { Link, useNavigate } from "react-router-dom"
 import "../../App.css"
 import CreateProduct from "./CreateProduct"
+import { statusTranslations } from "./statusTranslate"
 //nice to have: refetch
 
 function Products() {
@@ -54,7 +55,7 @@ function Products() {
           <p> Nombre: {product.name} </p>
           <p> Precio: {product.price} </p>
           <p> Descripcion: {product.description} </p>
-          <p> Status: {product.status} </p>
+          <p> Status: {statusTranslations[product.status] || product.status} </p>
           {product.category ? (<p> Categoria:  {product.category.name} </p>) : <></>}
           {product.highlighted == true ? (<p> Producto destacado </p>) : <></>}
           <p> Stock disponible {product.stock} </p>
