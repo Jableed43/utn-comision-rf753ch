@@ -7,6 +7,8 @@ import ProtectedRoute from "./components/auth/ProtectedRoute"
 import Users from "./components/admin/Users"
 import Products from "./components/products/Products"
 import NotFound from "./components/NotFound"
+import Categories from "./components/categories/Categories"
+import CreateCategory from "./components/categories/CreateCategory"
 
 export const router = createBrowserRouter([
 
@@ -47,6 +49,22 @@ export const router = createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <Products />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "/categories",
+        element: (
+            <ProtectedRoute>
+                <Categories />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: "/category-create",
+        element: (
+            <ProtectedRoute>
+                <CreateCategory />
             </ProtectedRoute>
         )
     },

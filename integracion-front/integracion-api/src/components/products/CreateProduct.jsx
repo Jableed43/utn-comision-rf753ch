@@ -5,14 +5,14 @@ import PropTypes from "prop-types";
 import useEditProduct from "../../hooks/product/useEditProduct";
 import useFetchCategory from "../../hooks/category/useFetchCategory";
 import useFetchStatus from "../../hooks/product/useFetchStatus";
-import { statusTranslations } from "./statusTranslate"
+import { statusTranslations } from "./statusTranslate";
 
-function CreateProduct({ productToEdit }) {
-    const { createProduct } = useCreateProduct()
-    const navigate = useNavigate()
-    const { editProduct } = useEditProduct()
-  const { categories, error: categoryError, fetchCategory, done: categoriesLoaded } = useFetchCategory()
-  const { status, error: statusError, fetchStatus, done: statusLoaded } = useFetchStatus()
+function CreateProduct({ productToEdit, updateProductList }) {
+  const { createProduct } = useCreateProduct();
+  const navigate = useNavigate();
+  const { editProduct } = useEditProduct();
+  const { categories, error: categoryError, fetchCategory, done: categoriesLoaded } = useFetchCategory();
+  const { status, error: statusError, fetchStatus, done: statusLoaded } = useFetchStatus();
 
   const [form, setForm] = useState({
     name: "",
@@ -20,48 +20,100 @@ function CreateProduct({ productToEdit }) {
     profitRate: 1.21,
     description: "",
     status: "AVAILABLE",
-    category: "",
+    category: { _id: "", name: "" }, // Inicializamos con un objeto vacío
     highlighted: false,
     stock: 0,
   });
 
+  // Cargar categorías
   useEffect(() => {
-    if(!categoriesLoaded){
-      fetchCategory()
+    if (!categoriesLoaded) {
+      fetchCategory();
     }
-  }, [categoriesLoaded, fetchCategory])
+  }, [categoriesLoaded, fetchCategory]);
+
+  // Cargar opciones de estado
+  useEffect(() => {
+    if (!statusLoaded) {
+      fetchStatus();
+    }
+  }, [statusLoaded, fetchStatus]);
+
+  // Establecer el estado del formulario cuando se edita un producto
+  useEffect(() => {
+    if (productToEdit && categoriesLoaded) {
+      const category = productToEdit.category ? { 
+        _id: productToEdit.category._id, 
+        name: productToEdit.category.name 
+      } : { _id: "", name: "" }; // Asegúrate de que la categoría esté bien definida
+
+      setForm({
+        name: productToEdit.name,
+        price: productToEdit.price,
+        profitRate: productToEdit.profitRate,
+        description: productToEdit.description,
+        status: productToEdit.status,
+        category: category, // Guarda tanto el id como el name
+        highlighted: productToEdit.highlighted,
+        stock: productToEdit.stock,
+      });
+    }
+  }, [productToEdit, categoriesLoaded]);
 
   useEffect(() => {
-    if(!statusLoaded){
-      fetchStatus()
-    }
-  }, [statusLoaded, fetchStatus])
+    console.log("Form state:", form); // Verifica si la categoría se está actualizando
+  }, [form]);
 
-  useEffect( () => {
-    if(productToEdit){
-      const normalizedProduct = {
-        ...productToEdit,
-        category: productToEdit.category?._id || "",
-      }
-      setForm(normalizedProduct)
-    }
-  }, [productToEdit] )
-
+  // Manejar el submit del formulario
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    //espera dos segundos antes de redirigir
-    if(!productToEdit){
-    await createProduct(form)
-    setTimeout( () => {
-      navigate(-1)
-    }, 2000 )
-  }
-  editProduct(productToEdit._id, form)
-  }
+    e.preventDefault();
+    if (!productToEdit) {
+      await createProduct(form);
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    } else {
+      const success = await editProduct(productToEdit._id, form);
+      if (success) {
+        updateProductList((prevProducts) =>
+          prevProducts.map((product) =>
+            product._id === productToEdit._id ? { ...product, ...form } : product
+          )
+        );
+      }
+    }
+  };
+
+  // Manejo del cambio de categoría
+  const handleInputChange = (e) => {
+    const { name, type, checked, value } = e.target;
+  
+    if (type === "checkbox") {
+      // Convertir el valor del checkbox en un booleano
+      setForm((prevForm) => ({
+        ...prevForm,
+        [name]: checked, // Si está checked, será true, si no, false
+      }));
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        [name]: value,
+      }));
+    }
+  };
+  
+
+  const handleCategoryChange = (e) => {
+    const selectedCategory = categories.find(cat => cat._id === e.target.value); // Encuentra la categoría completa
+    setForm((prevForm) => ({
+      ...prevForm,
+      category: selectedCategory, // Actualiza tanto el id como el name
+    }));
+  };
 
   return (
     <section>
-      { productToEdit ? <h2>Editar producto</h2> : <h2>Crear producto</h2> }
+      {productToEdit ? <h2>Editar producto</h2> : <h2>Crear producto</h2>}
       <br />
       <form onSubmit={handleSubmit}>
         <div>
@@ -71,7 +123,7 @@ function CreateProduct({ productToEdit }) {
             name="name"
             required
             value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -82,7 +134,7 @@ function CreateProduct({ productToEdit }) {
             name="price"
             required
             value={form.price}
-            onChange={(e) => setForm({ ...form, price: e.target.value })}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -92,7 +144,7 @@ function CreateProduct({ productToEdit }) {
             type="number"
             name="profitRate"
             value={form.profitRate}
-            onChange={(e) => setForm({ ...form, profitRate: e.target.value })}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -103,7 +155,7 @@ function CreateProduct({ productToEdit }) {
             name="description"
             required
             value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -112,7 +164,7 @@ function CreateProduct({ productToEdit }) {
           <select
             name="status"
             value={form.status}
-            onChange={(e) => setForm({ ...form, status: e.target.value })}
+            onChange={handleInputChange}
             required
           >
             <option value="" disabled>
@@ -120,31 +172,31 @@ function CreateProduct({ productToEdit }) {
             </option>
             {status.map((status) => (
               <option key={status} value={status}>
-                {/* Si queremos traducir los status que nos manda la api */}
-                { statusTranslations[status] || status }
+                {statusTranslations[status] || status}
               </option>
             ))}
           </select>
-          { statusError && ( <p style={{ color: 'red' }} > Error cargando opciones de estado  </p> ) }
+          {statusError && <p style={{ color: 'red' }}>Error cargando opciones de estado</p>}
         </div>
 
         <div>
           <label htmlFor="category">Product Category</label>
           <select
             name="category"
-            value={form.category || ""}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            value={form.category._id || ""} // Usa el _id de la categoría
+            onChange={handleCategoryChange}
+            required
           >
             <option value="" disabled>
               Select Category
             </option>
             {categories.map((category) => (
               <option key={category._id} value={category._id}>
-                {category.name.toLowerCase()}
+                {category.name.toLowerCase()} {/* Muestra el name de la categoría */}
               </option>
             ))}
           </select>
-          { categoryError && ( <p style={{ color: 'red' }}> Error al cargar las categorias: {categoryError} </p> ) }
+          {categoryError && <p style={{ color: 'red' }}>Error al cargar las categorias: {categoryError}</p>}
         </div>
 
         <div>
@@ -153,8 +205,7 @@ function CreateProduct({ productToEdit }) {
             type="checkbox"
             name="highlighted"
             checked={form.highlighted}
-            // checked={form.highlighted}
-            onChange={(e) => setForm({ ...form, highlighted: e.target.checked })}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -165,20 +216,19 @@ function CreateProduct({ productToEdit }) {
             name="stock"
             required
             value={form.stock}
-            onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
+            onChange={handleInputChange}
           />
         </div>
 
-            <button type="submit"> { productToEdit ? "Editar" : "Crear" } </button>
-
+        <button type="submit">{productToEdit ? "Editar" : "Crear"}</button>
       </form>
     </section>
   );
 }
 
-export default CreateProduct;
-
-
 CreateProduct.propTypes = {
   productToEdit: PropTypes.object,
+  updateProductList: PropTypes.func,
 };
+
+export default CreateProduct;

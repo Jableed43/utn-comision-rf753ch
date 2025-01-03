@@ -1,74 +1,89 @@
-import { useCallback, useEffect, useState } from "react"
-import useFetchProduct from "../../hooks/product/useFetchProduct"
-import useDeleteProduct from "../../hooks/product/useDeleteProduct"
-import { Link, useNavigate } from "react-router-dom"
-import "../../App.css"
-import CreateProduct from "./CreateProduct"
-import { statusTranslations } from "./statusTranslate"
-//nice to have: refetch
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../../App.css";
+import useFetchProduct from "../../hooks/product/useFetchProduct";
+import useDeleteProduct from "../../hooks/product/useDeleteProduct";
+import CreateProduct from "./CreateProduct";
+import { statusTranslations } from "./statusTranslate";
 
 function Products() {
-  const [products, setProducts] = useState([])
-  const [editingProduct, setEditingProduct] = useState(null)
+    const navigate = useNavigate();
+    const { products, fetchProduct, error: fetchError, loading: loadingProducts } = useFetchProduct();
+    const { deleteProduct, error: deleteError, loading: loadingDelete } = useDeleteProduct();
+    const [localProducts, setLocalProducts] = useState([]); // Local product list
+    const [editingProduct, setEditingProduct] = useState(null);
 
-  const navigate = useNavigate()
-  const { deleteProduct, error } = useDeleteProduct()
+    // Fetch products initially or if they are not available locally
+    useEffect(() => {
+        if (products && products.length) {
+            setLocalProducts(products); // Use fetched products
+        } else {
+            fetchProduct(); // Fetch products if not available
+        }
+    }, [products, fetchProduct]);
 
-  const { fetchProduct, done } = useFetchProduct()
+    const handleGoBack = () => {
+        navigate(-1);
+    };
 
-  const fetchProductsCallback = useCallback(async () => {
-    if (!done) {
-      const data = await fetchProduct()
-      setProducts(data)
-    }
-  }, [fetchProduct, done])
+    const handleDelete = async (id) => {
+        const success = await deleteProduct(id); // Delete from API
+        if (success) {
+            setLocalProducts(localProducts.filter((product) => product._id !== id)); // Update local list
+        }
+    };
 
-  useEffect(() => {
-    fetchProductsCallback()
-  }, [fetchProductsCallback])
+    const handleEdit = (product) => {
+        setEditingProduct(product); // Set product to edit
+    };
 
-  const handleGoBack = () => {
-    navigate(-1)
-  }
+    return (
+        <section>
+            <button onClick={handleGoBack}>Go Back</button>
+            <Link to="/create-product">Create New Product</Link>
+            <h2>Products</h2>
 
-  const handleDelete = (id) => {
-    deleteProduct(id)
-  }
+            {editingProduct && <CreateProduct productToEdit={editingProduct} updateProductList={setLocalProducts} />}
 
-  const handleEdit = (product) => {
-    setEditingProduct(product)
-  }
+            <div className="product-container">
+                {loadingProducts && <p>Loading products...</p>}
 
+                {fetchError && <p style={{ color: "red" }}>Error: {fetchError}</p>}
 
-  return (
-    <section>
+                {!loadingProducts && localProducts.length > 0 && (
+                    localProducts.map((product) => (
+                        <div
+                            key={product._id}
+                            style={{
+                                border: "solid black",
+                                margin: 10,
+                                padding: 10,
+                                textAlign: "center",
+                            }}
+                        >
+                            <p>Name: {product.name}</p>
+                            <p>Price: {product.price}</p>
+                            <p>Description: {product.description}</p>
+                            <p>Status: {statusTranslations[product.status] || product.status}</p>
+                            {product.category && <p>Category: {product.category.name}</p>}
+                            {product.highlighted && <p>Featured Product</p>}
+                            <p>Available Stock: {product.stock}</p>
+                            <button onClick={() => handleEdit(product)}>Edit</button>
+                            <button onClick={() => handleDelete(product._id)} disabled={loadingDelete}>
+                                {loadingDelete ? "Deleting..." : "Delete"}
+                            </button>
+                        </div>
+                    ))
+                )}
 
-      <button onClick={handleGoBack} >Volver Atras</button>
-      <Link to="/create-product"> Crear producto nuevo </Link>
-      <h2>Productos</h2>
+                {!loadingProducts && localProducts.length === 0 && !fetchError && (
+                    <p>No products available.</p>
+                )}
 
-      {editingProduct && <CreateProduct productToEdit={editingProduct} /> }
-
-      <div className="product-container">
-      {products.length === 0 ? <p>No hay productos</p> : (products.map(product => (
-        <div key={product._id} style={{ border: 'solid black' }} >
-          <p> Nombre: {product.name} </p>
-          <p> Precio: {product.price} </p>
-          <p> Descripcion: {product.description} </p>
-          <p> Status: {statusTranslations[product.status] || product.status} </p>
-          {product.category ? (<p> Categoria:  {product.category.name} </p>) : <></>}
-          {product.highlighted == true ? (<p> Producto destacado </p>) : <></>}
-          <p> Stock disponible {product.stock} </p>
-          <button onClick={ () => handleEdit(product)} >Editar</button>
-          <button onClick={ () => handleDelete(product._id) } >Eliminar</button>
-        </div>
-      )))}
-      </div>
-
-      { error && <p style={{color: 'red'}}> Error {error} </p> }
-
-    </section>
-  )
+                {deleteError && <p style={{ color: "red" }}>Error deleting: {deleteError}</p>}
+            </div>
+        </section>
+    );
 }
 
-export default Products
+export default Products;
