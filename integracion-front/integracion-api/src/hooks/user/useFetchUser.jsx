@@ -6,8 +6,15 @@ function useFetchUser() {
     const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}user/get`;
 
     const fetchUser = async () => {
+        const token = localStorage.getItem("token-utn")
         try {
-            const response = await fetch(initialUrl)
+            const response = await fetch(initialUrl, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            })
 
             if(response.ok){
               const users = await response.json()

@@ -8,6 +8,7 @@ const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
     const { loginUser, error } = useLoginUser()
+    const userRole = localStorage.getItem("role")
 
     const [ isAuthenticated, setIsAuthenticated ] = useState(() => {
         return localStorage.getItem("token-utn") !== null;
@@ -26,6 +27,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem("token-utn")
+        localStorage.removeItem("role")
         setIsAuthenticated(false)
     }
 
@@ -33,11 +35,12 @@ export const AuthProvider = ({ children }) => {
     useEffect(()=> {
         if(!isAuthenticated){
             localStorage.removeItem("token-utn")
+            localStorage.removeItem("role")
         }
     }, [isAuthenticated])
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout, error }}>
+        <AuthContext.Provider value={{ isAuthenticated, login, logout, error, userRole }}>
             {children}
         </AuthContext.Provider>
     )

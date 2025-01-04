@@ -4,7 +4,8 @@ import "../../App.css";
 import useFetchProduct from "../../hooks/product/useFetchProduct";
 import useDeleteProduct from "../../hooks/product/useDeleteProduct";
 import CreateProduct from "./CreateProduct";
-import { statusTranslations } from "./statusTranslate";
+import { statusTranslations } from "../../utils/translations";
+import { useAuth } from "../auth/AuthProvider";
 
 function Products() {
     const navigate = useNavigate();
@@ -12,6 +13,8 @@ function Products() {
     const { deleteProduct, error: deleteError, loading: loadingDelete } = useDeleteProduct();
     const [localProducts, setLocalProducts] = useState([]); // Local product list
     const [editingProduct, setEditingProduct] = useState(null);
+    const { userRole } = useAuth()
+
 
     // Fetch products initially or if they are not available locally
     useEffect(() => {
@@ -40,7 +43,8 @@ function Products() {
     return (
         <section>
             <button onClick={handleGoBack}>Go Back</button>
-            <Link to="/create-product">Create New Product</Link>
+            {userRole && userRole === "MERCHANT" && (<Link to="/create-product">Create New Product</Link>
+            )}
             <h2>Products</h2>
 
             {editingProduct && <CreateProduct productToEdit={editingProduct} updateProductList={setLocalProducts} />}

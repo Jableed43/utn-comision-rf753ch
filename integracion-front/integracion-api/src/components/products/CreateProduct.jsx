@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import useEditProduct from "../../hooks/product/useEditProduct";
 import useFetchCategory from "../../hooks/category/useFetchCategory";
 import useFetchStatus from "../../hooks/product/useFetchStatus";
-import { statusTranslations } from "./statusTranslate";
+import { statusTranslations } from "../../utils/translations";
 
 function CreateProduct({ productToEdit, updateProductList }) {
   const { createProduct } = useCreateProduct();

@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
     {
         path: "/create-product",
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["MERCHANT"]}>
                 <CreateProduct />
             </ProtectedRoute>
         )
@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
     {
         path: "/users",
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
                 <Users />
             </ProtectedRoute>
         )

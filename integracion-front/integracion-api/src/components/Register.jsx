@@ -1,22 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useRegisterUser from '../hooks/user/useRegisterUser';
 import { useNavigate } from 'react-router-dom'
+import useFetchRoles from '../hooks/user/useFetchRoles';
+import { roleTranslations } from '../utils/translations';
 
 //Recordar: pasar age a date
 
 function Register() {
+  const [showPassword, setShowPassword] = useState(false)
   const [form, setForm] = useState({
     name: "",
     lastName: "",
     age: 0,
     email: "",
-    password: ""
+    password: "",
+    role: "",
   })
 
   //Permite la navegacion/redireccion hacia partes de tu sitio
   const navigate = useNavigate()
 
   const { registerUser, error } = useRegisterUser()
+  const { error: errorRoles, done, roles, fetchRoles } = useFetchRoles()
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -24,6 +29,16 @@ function Register() {
     if(response){
       navigate("/")
     }
+  }
+
+  useEffect(() => {
+    if (!done) {
+      fetchRoles();
+    }
+  }, [fetchRoles, done]);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
 
    return (
@@ -59,11 +74,32 @@ function Register() {
 
       <div>
       <label htmlFor="password">Password</label>
-      <input type="password" name="password" required value={form.password}
+      <input type={ showPassword ? "text" : "password" } name="password" required value={form.password}
       onChange={e => setForm({...form, password: e.target.value}) }/>
+      <button type='button' style={{background: 'none', border: 'none', cursor: 'pointer' }} onClick={togglePasswordVisibility} >  {showPassword ? "🙈" : "👁️"} </button>
       </div>
 
-      { error ?? <p style={{ color: 'red' }} > {error}</p> }
+      <div>
+      <label htmlFor="role">Rol del usuario</label>
+          <select
+            name="role"
+            value={form.role || ""}
+            onChange={e => setForm({ ...form, role: e.target.value}) }
+            required
+          >
+            <option value="" disabled>
+              Select Role
+            </option>
+            {roles.map((role) => (
+              <option key={role} value={role}>
+                {roleTranslations[role] || role}
+              </option>
+            ))}
+          </select>
+          { errorRoles ?? <p style={{ color: 'red' }} > {errorRoles}</p> }
+        </div>
+
+        { error ?? <p style={{ color: 'red' }} > {error}</p> }
 
       <br />
 
