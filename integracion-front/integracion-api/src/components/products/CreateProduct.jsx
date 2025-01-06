@@ -22,7 +22,7 @@ function CreateProduct({ productToEdit }) {
     status: "AVAILABLE",
     category: "",
     highlighted: false,
-    stock: 0,
+    quantity: 0,
   });
 
   useEffect(() => {
@@ -159,13 +159,13 @@ function CreateProduct({ productToEdit }) {
         </div>
 
         <div>
-          <label htmlFor="stock">Available Stock</label>
+          <label htmlFor="quantity">Available quantity</label>
           <input
             type="number"
-            name="stock"
+            name="quantity"
             required
-            value={form.stock}
-            onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
+            value={form.quantity}
+            onChange={(e) => setForm({ ...form, quantity: Number(e.target.value) })}
           />
         </div>
 

@@ -7,7 +7,7 @@ import useLoginUser from '../../hooks/user/useLoginUser'
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-    const { loginUser, error } = useLoginUser()
+    const { loginUser, error, user } = useLoginUser()
 
     const [ isAuthenticated, setIsAuthenticated ] = useState(() => {
         return localStorage.getItem("token-utn") !== null;
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     }, [isAuthenticated])
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout, error }}>
+        <AuthContext.Provider value={{ isAuthenticated, login, logout, error, user }}>
             {children}
         </AuthContext.Provider>
     )

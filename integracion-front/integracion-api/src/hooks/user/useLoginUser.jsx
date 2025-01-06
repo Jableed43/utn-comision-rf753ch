@@ -2,6 +2,8 @@ import { useState } from "react"
 
 function useLoginUser() {
     const [error, setError] = useState();
+    const [user, setUser] = useState(null);
+
     const initialUrl = `${import.meta.env.VITE_BACKEND_ENDPOINT}user/login`;
 
     const loginUser = async formData => {
@@ -16,7 +18,10 @@ function useLoginUser() {
 
             if (response.ok) {
                 const data = await response.json()
+                console.log(data.user)
+                setUser(data.user)
                 localStorage.setItem("token-utn", data.token)
+                localStorage.setItem("user", data.user)
                 return true
             } else {
                 console.log({response})
@@ -30,7 +35,7 @@ function useLoginUser() {
             return false;
         }
     }
-    return { loginUser, error }
+    return { loginUser, error, user }
 }
 
 export default useLoginUser;
