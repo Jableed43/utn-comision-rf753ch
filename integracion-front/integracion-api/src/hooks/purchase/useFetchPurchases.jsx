@@ -11,7 +11,7 @@ function useFetchPurchases(userId) {
     const fetchPurchases = async () => {
       if (!userId) {
         setLoading(false); // Si no hay usuario, terminamos la carga
-        console.log(userId"No user ID provided");
+        console.log(userId, "No user ID provided");
         return;
       }
   
