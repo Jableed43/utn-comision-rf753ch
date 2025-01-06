@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from './auth/AuthProvider'
 
 function Home() {
-  const { logout } = useAuth()
+  const { logout, userRole } = useAuth()
 
   const handleLogout = () => {
     logout()
@@ -12,9 +12,12 @@ function Home() {
     <>
     <button onClick={handleLogout} > Logout </button>
     <h1>¡Bienvenid@ a nuestro sitio!</h1>
-    <Link to="/users"> Usuarios </Link>
+
+    { userRole && userRole === 'ADMIN' && (<Link to="/users"> Usuarios </Link>) }
     <br />
     <Link to="/products"> Productos </Link>
+    <br />
+    { userRole && userRole !== 'CLIENT' && (<Link to="/categories"> Categorias </Link>) }
     </>
   )
 }
