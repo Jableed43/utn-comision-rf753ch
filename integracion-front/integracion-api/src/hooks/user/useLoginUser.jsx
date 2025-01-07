@@ -18,6 +18,7 @@ function useLoginUser() {
                 const data = await response.json()
                 localStorage.setItem("token-utn", data.token)
                 localStorage.setItem("role", data.role)
+                localStorage.setItem("userId", data.user.id)
                 return true
             } else {
                 console.log({response})

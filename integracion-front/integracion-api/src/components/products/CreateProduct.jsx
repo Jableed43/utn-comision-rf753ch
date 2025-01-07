@@ -87,7 +87,7 @@ function CreateProduct({ productToEdit, updateProductList }) {
   // Manejo del cambio de categoría
   const handleInputChange = (e) => {
     const { name, type, checked, value } = e.target;
-  
+  // corregido bug de highlighted
     if (type === "checkbox") {
       // Convertir el valor del checkbox en un booleano
       setForm((prevForm) => ({

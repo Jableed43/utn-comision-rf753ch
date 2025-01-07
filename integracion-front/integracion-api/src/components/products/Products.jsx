@@ -6,88 +6,123 @@ import useDeleteProduct from "../../hooks/product/useDeleteProduct";
 import CreateProduct from "./CreateProduct";
 import { statusTranslations } from "../../utils/translations";
 import { useAuth } from "../auth/AuthProvider";
+import useFetchPurchases from "../../hooks/purchases/useFetchPurchases"
+import useCreatePurchase from "../../hooks/purchases/useCreatePurchase";
 
 function Products() {
-    const navigate = useNavigate();
-    const { products, fetchProduct, error: fetchError, loading: loadingProducts } = useFetchProduct();
-    const { deleteProduct, error: deleteError, loading: loadingDelete } = useDeleteProduct();
-    const [localProducts, setLocalProducts] = useState([]); // Local product list
-    const [editingProduct, setEditingProduct] = useState(null);
-    const { userRole } = useAuth()
+  const navigate = useNavigate();
+  const { products, fetchProduct, error: fetchError, loading: loadingProducts } = useFetchProduct();
+  const { deleteProduct, error: deleteError, loading: loadingDelete } = useDeleteProduct();
+  const [localProducts, setLocalProducts] = useState([]); // Local product list
+  const [editingProduct, setEditingProduct] = useState(null);
+  const { userRole, isAuthenticated } = useAuth()
+  const { purchases } = useFetchPurchases()
+  const { createPurchase } = useCreatePurchase()
+  const userId = localStorage.getItem("userId")
 
 
-    // Fetch products initially or if they are not available locally
-    useEffect(() => {
-        if (products && products.length) {
-            setLocalProducts(products); // Use fetched products
-        } else {
-            fetchProduct(); // Fetch products if not available
-        }
-    }, [products, fetchProduct]);
 
-    const handleGoBack = () => {
-        navigate(-1);
-    };
+  // Fetch products initially or if they are not available locally
+  useEffect(() => {
+    if (products && products.length) {
+      console.log({ purchases })
+      setLocalProducts(products); // Use fetched products
+    } else {
+      fetchProduct(); // Fetch products if not available
+    }
+  }, [products, fetchProduct, purchases]);
 
-    const handleDelete = async (id) => {
-        const success = await deleteProduct(id); // Delete from API
-        if (success) {
-            setLocalProducts(localProducts.filter((product) => product._id !== id)); // Update local list
-        }
-    };
+  const handleGoBack = () => {
+    navigate(-1);
+  };
 
-    const handleEdit = (product) => {
-        setEditingProduct(product); // Set product to edit
-    };
+  const handleDelete = async (id) => {
+    const success = await deleteProduct(id); // Delete from API
+    if (success) {
+      setLocalProducts(localProducts.filter((product) => product._id !== id)); // Update local list
+    }
+  };
 
-    return (
-        <section>
-            <button onClick={handleGoBack}>Go Back</button>
-            {userRole && userRole === "MERCHANT" && (<Link to="/create-product">Create New Product</Link>
-            )}
-            <h2>Products</h2>
+  const handleEdit = (product) => {
+    setEditingProduct(product); // Set product to edit
+  };
 
-            {editingProduct && <CreateProduct productToEdit={editingProduct} updateProductList={setLocalProducts} />}
+  const handlePurchase = async (product) => {
+    try {
+      if(!isAuthenticated){
+        return
+      }
 
-            <div className="product-container">
-                {loadingProducts && <p>Loading products...</p>}
+      const purchaseData = {
+        clientId: userId,
+        productId: product._id,
+        merchantId: "dasdasd",
+        purchasedAt: Date.now(),
+        quantity: 1,
+      }
 
-                {fetchError && <p style={{ color: "red" }}>Error: {fetchError}</p>}
+     const purchaseId = await createPurchase(purchaseData)
+     console.log({purchaseData}, "at products")
+      alert("purchaseID", purchaseId)
 
-                {!loadingProducts && localProducts.length > 0 && (
-                    localProducts.map((product) => (
-                        <div
-                            key={product._id}
-                            style={{
-                                border: "solid black",
-                                margin: 10,
-                                padding: 10,
-                                textAlign: "center",
-                            }}
-                        >
-                            <p>Name: {product.name}</p>
-                            <p>Price: {product.price}</p>
-                            <p>Description: {product.description}</p>
-                            <p>Status: {statusTranslations[product.status] || product.status}</p>
-                            {product.category && <p>Category: {product.category.name}</p>}
-                            {product.highlighted && <p>Featured Product</p>}
-                            <p>Available Stock: {product.stock}</p>
-                            <button onClick={() => handleEdit(product)}>Edit</button>
-                            <button onClick={() => handleDelete(product._id)} disabled={loadingDelete}>
-                                {loadingDelete ? "Deleting..." : "Delete"}
-                            </button>
-                        </div>
-                    ))
-                )}
+    } catch (error) {
+      console.error(error)
+    } 
+  }
 
-                {!loadingProducts && localProducts.length === 0 && !fetchError && (
-                    <p>No products available.</p>
-                )}
+  return (
+    <section>
+      <button onClick={handleGoBack}>Go Back</button>
+      {userRole && userRole === "MERCHANT" && (<Link to="/create-product">Create New Product</Link>
+      )}
+      <h2>Products</h2>
 
-                {deleteError && <p style={{ color: "red" }}>Error deleting: {deleteError}</p>}
+      {editingProduct && <CreateProduct productToEdit={editingProduct} updateProductList={setLocalProducts} />}
+
+      <div className="product-container">
+        {loadingProducts && <p>Loading products...</p>}
+
+        {fetchError && <p style={{ color: "red" }}>Error: {fetchError}</p>}
+
+        {!loadingProducts && localProducts.length > 0 && (
+          localProducts.map((product) => (
+            <div
+              key={product._id}
+              style={{
+                border: "solid black",
+                margin: 10,
+                padding: 10,
+                textAlign: "center",
+              }}
+            >
+              <p>Name: {product.name}</p>
+              <p>Price: {product.price}</p>
+              <p>Description: {product.description}</p>
+              <p>Status: {statusTranslations[product.status] || product.status}</p>
+              {product.category && <p>Category: {product.category.name}</p>}
+              {product.highlighted && <p>Featured Product</p>}
+              <p>Available Stock: {product.stock}</p>
+
+
+              {userRole && userRole !== "CLIENT" && (
+                <> <button onClick={() => handleEdit(product)}>Edit</button>
+                  <button onClick={() => handleDelete(product._id)} disabled={loadingDelete}>
+                    {loadingDelete ? "Deleting..." : "Delete"}
+                  </button></>)}
+                  {userRole && userRole === "CLIENT" && (<button onClick={() => handlePurchase(product)} >Comprar</button>)}
             </div>
-        </section>
-    );
+          ))
+        )}
+
+
+        {!loadingProducts && localProducts.length === 0 && !fetchError && (
+          <p>No products available.</p>
+        )}
+
+        {deleteError && <p style={{ color: "red" }}>Error deleting: {deleteError}</p>}
+      </div>
+    </section>
+  );
 }
 
 export default Products;
