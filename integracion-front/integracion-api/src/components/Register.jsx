@@ -1,35 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, TextField, Button, Typography, MenuItem } from '@mui/material';
 import useRegisterUser from '../hooks/user/useRegisterUser';
-import { useNavigate } from 'react-router-dom'
 import useFetchRoles from '../hooks/user/useFetchRoles';
 import { roleTranslations } from '../utils/translations';
-
-//Recordar: pasar age a date
+import Layout from './layout/Layout';
 
 function Register() {
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
-    name: "",
-    lastName: "",
-    age: 0,
-    email: "",
-    password: "",
-    role: "",
-  })
+    name: '',
+    lastName: '',
+    age: '',
+    email: '',
+    password: '',
+    role: '',
+  });
 
-  //Permite la navegacion/redireccion hacia partes de tu sitio
-  const navigate = useNavigate()
-
-  const { registerUser, error } = useRegisterUser()
-  const { error: errorRoles, done, roles, fetchRoles } = useFetchRoles()
+  const navigate = useNavigate();
+  const { registerUser, error } = useRegisterUser();
+  const { error: errorRoles, done, roles, fetchRoles } = useFetchRoles();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    const response = await registerUser(form)
-    if(response){
-      navigate("/")
+    const response = await registerUser(form);
+    if (response) {
+      navigate('/');
     }
-  }
+  };
 
   useEffect(() => {
     if (!done) {
@@ -38,77 +36,155 @@ function Register() {
   }, [fetchRoles, done]);
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
-   return (
-    <>
-    <section className='formContainer'>
-    <h2>Register</h2>
-    <br />
-    <form onSubmit={handleRegister} >
-
-      <div>
-      <label htmlFor="name">Name</label>
-      <input type="text" name="name" required 
-      value={form.name} onChange={e => setForm({ ...form, name: e.target.value}) }/>
-      </div>
-
-      <div>
-      <label htmlFor="lastName">LastName</label>
-      <input type="text" name="lastName" required 
-      value={form.lastName} onChange={e => setForm({ ...form, lastName: e.target.value}) }/>
-      </div>
-
-      <div>
-      <label htmlFor="age">Age</label>
-      <input type="number" name="age" required 
-      value={form.age} onChange={e => setForm({ ...form, age: e.target.value}) }/>
-      </div>
-
-      <div>
-      <label htmlFor="email">Email</label>
-      <input type="email" name="email" required 
-      value={form.email} onChange={e => setForm({ ...form, email: e.target.value}) }/>
-      </div>
-
-      <div>
-      <label htmlFor="password">Password</label>
-      <input type={ showPassword ? "text" : "password" } name="password" required value={form.password}
-      onChange={e => setForm({...form, password: e.target.value}) }/>
-      <button type='button' style={{background: 'none', border: 'none', cursor: 'pointer' }} onClick={togglePasswordVisibility} >  {showPassword ? "🙈" : "👁️"} </button>
-      </div>
-
-      <div>
-      <label htmlFor="role">Rol del usuario</label>
-          <select
-            name="role"
-            value={form.role || ""}
-            onChange={e => setForm({ ...form, role: e.target.value}) }
+  return (
+    <Layout>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: 2,
+        }}
+      >
+        <Typography 
+          variant="h4" 
+          sx={{ mb: 2, fontWeight: 'bold', color: 'black' }}
+        >
+          Register
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleRegister}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            maxWidth: '400px',
+            background: '#fff',
+            padding: 3,
+            marginBottom: 4,
+            borderRadius: 2,
+            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+          }}
+        >
+          <TextField
+            label="Name"
+            variant="outlined"
             required
+            fullWidth
+            value={form.name}
+            onChange={(e) =>
+              setForm({ ...form, name: e.target.value })
+            }
+          />
+          <TextField
+            label="Last Name"
+            variant="outlined"
+            required
+            fullWidth
+            value={form.lastName}
+            onChange={(e) =>
+              setForm({ ...form, lastName: e.target.value })
+            }
+          />
+          <TextField
+            label="Age"
+            variant="outlined"
+            type="number"
+            required
+            fullWidth
+            value={form.age}
+            onChange={(e) =>
+              setForm({ ...form, age: e.target.value })
+            }
+          />
+          <TextField
+            label="Email"
+            variant="outlined"
+            type="email"
+            required
+            fullWidth
+            value={form.email}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            type={showPassword ? 'text' : 'password'}
+            required
+            fullWidth
+            value={form.password}
+            onChange={(e) =>
+              setForm({ ...form, password: e.target.value })
+            }
+            InputProps={{
+              endAdornment: (
+                <Button
+                  onClick={togglePasswordVisibility}
+                  sx={{
+                    fontSize: '1.2rem',
+                    color: 'black',
+                    background: 'none',
+                    boxShadow: 'none',
+                    minWidth: 0,
+                  }}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </Button>
+              ),
+            }}
+          />
+          <TextField
+            select
+            label="Role"
+            variant="outlined"
+            required
+            fullWidth
+            value={form.role}
+            onChange={(e) =>
+              setForm({ ...form, role: e.target.value })
+            }
           >
-            <option value="" disabled>
+            <MenuItem value="" disabled>
               Select Role
-            </option>
+            </MenuItem>
             {roles.map((role) => (
-              <option key={role} value={role}>
+              <MenuItem key={role} value={role}>
                 {roleTranslations[role] || role}
-              </option>
+              </MenuItem>
             ))}
-          </select>
-          { errorRoles ?? <p style={{ color: 'red' }} > {errorRoles}</p> }
-        </div>
-
-        { error ?? <p style={{ color: 'red' }} > {error}</p> }
-
-      <br />
-
-      <button type="submit">Register</button>
-
-    </form>
-    </section>
-    </>
-  )
+          </TextField>
+          {errorRoles && (
+            <Typography variant="body2" color="error" textAlign="center">
+              {errorRoles}
+            </Typography>
+          )}
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+            sx={{
+              background: '#FEAFA8',
+              ':hover': { background: '#FEB4AD' },
+            }}
+          >
+            Register
+          </Button>
+          {error && (
+            <Typography variant="body2" color="error" textAlign="center">
+              Error: {error}
+            </Typography>
+          )}
+        </Box>
+      </Box>
+    </Layout>
+  );
 }
 
-export default Register
+export default Register;

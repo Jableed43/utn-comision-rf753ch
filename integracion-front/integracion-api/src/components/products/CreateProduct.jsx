@@ -1,11 +1,25 @@
 import { useEffect, useState } from "react";
-import useCreateProduct from "../../hooks/product/useCreateProduct";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import useCreateProduct from "../../hooks/product/useCreateProduct";
 import useEditProduct from "../../hooks/product/useEditProduct";
 import useFetchCategory from "../../hooks/category/useFetchCategory";
 import useFetchStatus from "../../hooks/product/useFetchStatus";
 import { statusTranslations } from "../../utils/translations";
+import {
+  Box,
+  Button,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+  Grid2,
+  Typography,
+  Alert,
+} from "@mui/material";
 
 function CreateProduct({ productToEdit, updateProductList }) {
   const { createProduct } = useCreateProduct();
@@ -20,51 +34,41 @@ function CreateProduct({ productToEdit, updateProductList }) {
     profitRate: 1.21,
     description: "",
     status: "AVAILABLE",
-    category: { _id: "", name: "" }, // Inicializamos con un objeto vacío
+    category: { _id: "", name: "" },
     highlighted: false,
     stock: 0,
   });
 
-  // Cargar categorías
   useEffect(() => {
     if (!categoriesLoaded) {
       fetchCategory();
     }
   }, [categoriesLoaded, fetchCategory]);
 
-  // Cargar opciones de estado
   useEffect(() => {
     if (!statusLoaded) {
       fetchStatus();
     }
   }, [statusLoaded, fetchStatus]);
 
-  // Establecer el estado del formulario cuando se edita un producto
   useEffect(() => {
     if (productToEdit && categoriesLoaded) {
-      const category = productToEdit.category ? { 
-        _id: productToEdit.category._id, 
-        name: productToEdit.category.name 
-      } : { _id: "", name: "" }; // Asegúrate de que la categoría esté bien definida
-
+      const category = productToEdit.category
+        ? { _id: productToEdit.category._id, name: productToEdit.category.name }
+        : { _id: "", name: "" };
       setForm({
         name: productToEdit.name,
         price: productToEdit.price,
         profitRate: productToEdit.profitRate,
         description: productToEdit.description,
         status: productToEdit.status,
-        category: category, // Guarda tanto el id como el name
+        category: category,
         highlighted: productToEdit.highlighted,
         stock: productToEdit.stock,
       });
     }
   }, [productToEdit, categoriesLoaded]);
 
-  useEffect(() => {
-    console.log("Form state:", form); // Verifica si la categoría se está actualizando
-  }, [form]);
-
-  // Manejar el submit del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!productToEdit) {
@@ -84,145 +88,154 @@ function CreateProduct({ productToEdit, updateProductList }) {
     }
   };
 
-  // Manejo del cambio de categoría
   const handleInputChange = (e) => {
     const { name, type, checked, value } = e.target;
-  // corregido bug de highlighted
     if (type === "checkbox") {
-      // Convertir el valor del checkbox en un booleano
-      setForm((prevForm) => ({
-        ...prevForm,
-        [name]: checked, // Si está checked, será true, si no, false
-      }));
+      setForm((prevForm) => ({ ...prevForm, [name]: checked }));
     } else {
-      setForm((prevForm) => ({
-        ...prevForm,
-        [name]: value,
-      }));
+      setForm((prevForm) => ({ ...prevForm, [name]: value }));
     }
   };
-  
 
   const handleCategoryChange = (e) => {
-    const selectedCategory = categories.find(cat => cat._id === e.target.value); // Encuentra la categoría completa
-    setForm((prevForm) => ({
-      ...prevForm,
-      category: selectedCategory, // Actualiza tanto el id como el name
-    }));
+    const selectedCategory = categories.find((cat) => cat._id === e.target.value);
+    setForm((prevForm) => ({ ...prevForm, category: selectedCategory }));
   };
 
   return (
-    <section>
-      {productToEdit ? <h2>Editar producto</h2> : <h2>Crear producto</h2>}
-      <br />
+    <Box sx={{ p: 4 }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        {productToEdit ? "Edit Product" : "Create Product"}
+      </Typography>
+
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Product Name</label>
-          <input
-            type="text"
-            name="name"
-            required
-            value={form.name}
-            onChange={handleInputChange}
-          />
-        </div>
+        <Grid2 container spacing={3}>
+          <Grid2 item xs={12} sm={6}>
+            <TextField
+              label="Product Name"
+              name="name"
+              required
+              fullWidth
+              value={form.name}
+              onChange={handleInputChange}
+            />
+          </Grid2>
 
-        <div>
-          <label htmlFor="price">Price</label>
-          <input
-            type="number"
-            name="price"
-            required
-            value={form.price}
-            onChange={handleInputChange}
-          />
-        </div>
+          <Grid2 item xs={12} sm={6}>
+            <TextField
+              label="Price"
+              name="price"
+              type="number"
+              required
+              fullWidth
+              value={form.price}
+              onChange={handleInputChange}
+            />
+          </Grid2>
 
-        <div>
-          <label htmlFor="profitRate">Profit rate</label>
-          <input
-            type="number"
-            name="profitRate"
-            value={form.profitRate}
-            onChange={handleInputChange}
-          />
-        </div>
+          <Grid2 item xs={12} sm={6}>
+            <TextField
+              label="Profit Rate"
+              name="profitRate"
+              type="number"
+              fullWidth
+              value={form.profitRate}
+              onChange={handleInputChange}
+            />
+          </Grid2>
 
-        <div>
-          <label htmlFor="description">Product description</label>
-          <input
-            type="text"
-            name="description"
-            required
-            value={form.description}
-            onChange={handleInputChange}
-          />
-        </div>
+          <Grid2 item xs={12}>
+            <TextField
+              label="Product Description"
+              name="description"
+              required
+              fullWidth
+              value={form.description}
+              onChange={handleInputChange}
+            />
+          </Grid2>
 
-        <div>
-          <label htmlFor="status">Product Status</label>
-          <select
-            name="status"
-            value={form.status}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="" disabled>
-              Select Status
-            </option>
-            {status.map((status) => (
-              <option key={status} value={status}>
-                {statusTranslations[status] || status}
-              </option>
-            ))}
-          </select>
-          {statusError && <p style={{ color: 'red' }}>Error cargando opciones de estado</p>}
-        </div>
+          <Grid2 item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Product Status</InputLabel>
+              <Select
+                name="status"
+                value={form.status}
+                onChange={handleInputChange}
+                required
+              >
+                <MenuItem value="" disabled>
+                  Select Status
+                </MenuItem>
+                {status.map((status) => (
+                  <MenuItem key={status} value={status}>
+                    {statusTranslations[status] || status}
+                  </MenuItem>
+                ))}
+              </Select>
+              {statusError && (
+                <Alert severity="error">Error loading status options</Alert>
+              )}
+            </FormControl>
+          </Grid2>
 
-        <div>
-          <label htmlFor="category">Product Category</label>
-          <select
-            name="category"
-            value={form.category._id || ""} // Usa el _id de la categoría
-            onChange={handleCategoryChange}
-            required
-          >
-            <option value="" disabled>
-              Select Category
-            </option>
-            {categories.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.name.toLowerCase()} {/* Muestra el name de la categoría */}
-              </option>
-            ))}
-          </select>
-          {categoryError && <p style={{ color: 'red' }}>Error al cargar las categorias: {categoryError}</p>}
-        </div>
+          <Grid2 item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel>Product Category</InputLabel>
+              <Select
+                name="category"
+                value={form.category._id || ""}
+                onChange={handleCategoryChange}
+                required
+              >
+                <MenuItem value="" disabled>
+                  Select Category
+                </MenuItem>
+                {categories.map((category) => (
+                  <MenuItem key={category._id} value={category._id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {categoryError && (
+                <Alert severity="error">Error loading categories: {categoryError}</Alert>
+              )}
+            </FormControl>
+          </Grid2>
 
-        <div>
-          <label htmlFor="highlighted">¿Is your product highLighted?</label>
-          <input
-            type="checkbox"
-            name="highlighted"
-            checked={form.highlighted}
-            onChange={handleInputChange}
-          />
-        </div>
+          <Grid2 item xs={12}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="highlighted"
+                  checked={form.highlighted}
+                  onChange={handleInputChange}
+                />
+              }
+              label="Is the product highlighted?"
+            />
+          </Grid2>
 
-        <div>
-          <label htmlFor="stock">Available Stock</label>
-          <input
-            type="number"
-            name="stock"
-            required
-            value={form.stock}
-            onChange={handleInputChange}
-          />
-        </div>
+          <Grid2 item xs={12} sm={6}>
+            <TextField
+              label="Available Stock"
+              name="stock"
+              type="number"
+              required
+              fullWidth
+              value={form.stock}
+              onChange={handleInputChange}
+            />
+          </Grid2>
 
-        <button type="submit">{productToEdit ? "Editar" : "Crear"}</button>
+          <Grid2 item xs={12}>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              {productToEdit ? "Edit Product" : "Create Product"}
+            </Button>
+          </Grid2>
+        </Grid2>
       </form>
-    </section>
+    </Box>
   );
 }
 

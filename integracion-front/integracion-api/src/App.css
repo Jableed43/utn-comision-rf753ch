@@ -1,3 +1,8 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+
 .product-container {
   display: flex;
   flex-direction: row;
@@ -10,4 +15,10 @@
 .product-container div{
     width: 180px;
     padding: 8px;
+}
+
+@media (min-width: 0px) {
+  .css-1t6c9ts {
+      display: flex !important;
+  }
 }

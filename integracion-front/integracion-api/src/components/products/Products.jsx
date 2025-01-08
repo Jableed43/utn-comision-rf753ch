@@ -1,127 +1,181 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../../App.css";
 import useFetchProduct from "../../hooks/product/useFetchProduct";
 import useDeleteProduct from "../../hooks/product/useDeleteProduct";
 import CreateProduct from "./CreateProduct";
 import { statusTranslations } from "../../utils/translations";
 import { useAuth } from "../auth/AuthProvider";
-import useFetchPurchases from "../../hooks/purchases/useFetchPurchases"
+import useFetchPurchases from "../../hooks/purchases/useFetchPurchases";
 import useCreatePurchase from "../../hooks/purchases/useCreatePurchase";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  CircularProgress,
+  Grid2,
+  Alert,
+} from "@mui/material";
+import Layout from "../layout/Layout";
+import GoBackButton from "../layout/GoBackButton";
 
 function Products() {
-  const navigate = useNavigate();
   const { products, fetchProduct, error: fetchError, loading: loadingProducts } = useFetchProduct();
   const { deleteProduct, error: deleteError, loading: loadingDelete } = useDeleteProduct();
-  const [localProducts, setLocalProducts] = useState([]); // Local product list
+  const [localProducts, setLocalProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
-  const { userRole, isAuthenticated } = useAuth()
-  const { purchases } = useFetchPurchases()
-  const { createPurchase } = useCreatePurchase()
-  const userId = localStorage.getItem("userId")
+  const { userRole, isAuthenticated } = useAuth();
+  const { purchases } = useFetchPurchases();
+  const { createPurchase } = useCreatePurchase();
+  const userId = localStorage.getItem("userId");
 
-
-
-  // Fetch products initially or if they are not available locally
   useEffect(() => {
     if (products && products.length) {
-      console.log({ purchases })
-      setLocalProducts(products); // Use fetched products
+      setLocalProducts(products);
     } else {
-      fetchProduct(); // Fetch products if not available
+      fetchProduct();
     }
   }, [products, fetchProduct, purchases]);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
 
   const handleDelete = async (id) => {
-    const success = await deleteProduct(id); // Delete from API
+    const success = await deleteProduct(id);
     if (success) {
-      setLocalProducts(localProducts.filter((product) => product._id !== id)); // Update local list
+      setLocalProducts(localProducts.filter((product) => product._id !== id));
     }
   };
 
-  const handleEdit = (product) => {
-    setEditingProduct(product); // Set product to edit
-  };
+  const handleEdit = (product) => setEditingProduct(product);
 
   const handlePurchase = async (product) => {
-    try {
-      if(!isAuthenticated){
-        return
-      }
+    if (!isAuthenticated) return;
 
+    try {
       const purchaseData = {
         clientId: userId,
         productId: product._id,
-        merchantId: "dasdasd",
+        merchantId: "merchantId-placeholder",
         purchasedAt: Date.now(),
         quantity: 1,
-      }
+      };
 
-     const purchaseId = await createPurchase(purchaseData)
-     console.log({purchaseData}, "at products")
-      alert("purchaseID", purchaseId)
-
+      const purchaseId = await createPurchase(purchaseData);
+      alert("Purchase successful! ID: " + purchaseId);
     } catch (error) {
-      console.error(error)
-    } 
-  }
+      console.error(error);
+    }
+  };
 
   return (
-    <section>
-      <button onClick={handleGoBack}>Go Back</button>
-      {userRole && userRole === "MERCHANT" && (<Link to="/create-product">Create New Product</Link>
+    <Layout>
+    <Box sx={{ p: 3 }}>
+      <GoBackButton sx={{ position: "absolute", left: 0 }} />
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+        {userRole === "MERCHANT" && (
+          <Button variant="contained" component={Link} to="/create-product">
+            Create New Product
+          </Button>
+        )}
+      </Box>
+
+      <Typography variant="h4" align="center" gutterBottom>
+        Products
+      </Typography>
+
+      {editingProduct && (
+        <CreateProduct productToEdit={editingProduct} updateProductList={setLocalProducts} />
       )}
-      <h2>Products</h2>
 
-      {editingProduct && <CreateProduct productToEdit={editingProduct} updateProductList={setLocalProducts} />}
-
-      <div className="product-container">
-        {loadingProducts && <p>Loading products...</p>}
-
-        {fetchError && <p style={{ color: "red" }}>Error: {fetchError}</p>}
-
-        {!loadingProducts && localProducts.length > 0 && (
-          localProducts.map((product) => (
-            <div
-              key={product._id}
-              style={{
-                border: "solid black",
-                margin: 10,
-                padding: 10,
-                textAlign: "center",
-              }}
-            >
-              <p>Name: {product.name}</p>
-              <p>Price: {product.price}</p>
-              <p>Description: {product.description}</p>
-              <p>Status: {statusTranslations[product.status] || product.status}</p>
-              {product.category && <p>Category: {product.category.name}</p>}
-              {product.highlighted && <p>Featured Product</p>}
-              <p>Available Stock: {product.stock}</p>
-
-
-              {userRole && userRole !== "CLIENT" && (
-                <> <button onClick={() => handleEdit(product)}>Edit</button>
-                  <button onClick={() => handleDelete(product._id)} disabled={loadingDelete}>
-                    {loadingDelete ? "Deleting..." : "Delete"}
-                  </button></>)}
-                  {userRole && userRole === "CLIENT" && (<button onClick={() => handlePurchase(product)} >Comprar</button>)}
-            </div>
-          ))
+      <Grid2 container spacing={3}>
+        {loadingProducts && (
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 3 }}>
+            <CircularProgress />
+          </Box>
         )}
 
+        {fetchError && (
+          <Grid2 item xs={12}>
+            <Alert severity="error">Error: {fetchError}</Alert>
+          </Grid2>
+        )}
+
+        {!loadingProducts &&
+          localProducts.map((product) => (
+            <Grid2 item xs={12} sm={6} md={4} key={product._id}>
+              <Card sx={{ height: "100%" }}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    {product.name}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Price:</strong> ${product.price}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Description:</strong> {product.description}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Status:</strong> {statusTranslations[product.status] || product.status}
+                  </Typography>
+                  {product.category && (
+                    <Typography variant="body2">
+                      <strong>Category:</strong> {product.category.name}
+                    </Typography>
+                  )}
+                  {product.highlighted && (
+                    <Typography variant="body2" color="primary">
+                      Featured Product
+                    </Typography>
+                  )}
+                  <Typography variant="body2">
+                    <strong>Available Stock:</strong> {product.stock}
+                  </Typography>
+                </CardContent>
+
+                <CardActions sx={{ justifyContent: "center" }} >
+                  {userRole !== "CLIENT" && (
+                    <>
+                      <Button size="small" onClick={() => handleEdit(product)}>
+                        Edit
+                      </Button>
+                      <Button
+                        size="small"
+                        color="error"
+                        onClick={() => handleDelete(product._id)}
+                        disabled={loadingDelete}
+                      >
+                        {loadingDelete ? "Deleting..." : "Delete"}
+                      </Button>
+                    </>
+                  )}
+                  {userRole === "CLIENT" && (
+                    <Button size="small" color="primary" onClick={() => handlePurchase(product)}>
+                      Buy
+                    </Button>
+                  )}
+                </CardActions>
+              </Card>
+            </Grid2>
+          ))}
 
         {!loadingProducts && localProducts.length === 0 && !fetchError && (
-          <p>No products available.</p>
+          <Grid2 item xs={12}>
+            <Typography variant="body1" align="center">
+              No products available.
+            </Typography>
+          </Grid2>
         )}
 
-        {deleteError && <p style={{ color: "red" }}>Error deleting: {deleteError}</p>}
-      </div>
-    </section>
+        {deleteError && (
+          <Grid2 item xs={12}>
+            <Alert severity="error">Error deleting: {deleteError}</Alert>
+          </Grid2>
+        )}
+      </Grid2>
+    </Box>
+    </Layout>
   );
 }
 
